@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/Resources">
+        <file>rotate_cursor.png</file>
+    </qresource>
+</RCC>

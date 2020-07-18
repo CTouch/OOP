@@ -19,12 +19,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     myellipse.cpp \
+    myimage.cpp \
     myrectangle.cpp
 
 HEADERS += \
     graph.h \
     mainwindow.h \
     myellipse.h \
+    myimage.h \
     myrectangle.h
 
 FORMS += \

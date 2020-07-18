@@ -102,6 +102,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter painter(this); // 构建画笔
     drawAll(painter); // 绘制图形
+//    painter.drawImage()
 }
 
 void MainWindow::drawAll(QPainter &painter)
@@ -256,6 +257,8 @@ void MainWindow::setupMenu()
     QAction *new_file = new QAction("New"); // 新建文件
     QAction *open_file = new QAction("Open"); // 打开oop文件
     QAction *save_file = new QAction("Save"); // 保存oop文件
+    QAction *import_image = new QAction("Import Image"); //import .png files 20200718
+
 //    QAction *import_file = new QAction("Import"); // 导入oop文件或图像文件，不会覆盖现在的内容
 
 
@@ -284,6 +287,7 @@ void MainWindow::setupMenu()
     new_file->setShortcut(QKeySequence::New); // windows: control+N, mac: command+N
     open_file->setShortcut(QKeySequence::Open); // windwos: control+O, mac: command+O
     save_file->setShortcut(QKeySequence::Save); // windwos: control+S, mac: command+s
+    import_image->setShortcut(QKeySequence(tr("Ctrl+I"))); // control + i
     Duplicate->setShortcut(QKeySequence::Copy); // windwos: control+C, mac: command+c
 
 
@@ -291,6 +295,8 @@ void MainWindow::setupMenu()
     menu_file->addAction(new_file);
     menu_file->addAction(open_file);
     menu_file->addAction(save_file);
+    menu_file->addAction(import_image);         //add by touch 20200718
+
 //    menu_edit->addAction(import_file);
     menu_edit->addAction(Cursor);
     menu_edit->addAction(Ellipse);
@@ -435,6 +441,11 @@ void MainWindow::readFile(QFile &file)
             rectangle->read(in);
             AllGraphs.push_back(rectangle);
         }
+        else if (shape == Shape::IMAGE)
+        {
+            myImage *image = new myImage(i,in);
+            AllGraphs.push_back(image);
+        }
     }
     file.close(); // 关闭文件
 
@@ -447,6 +458,7 @@ void MainWindow::readFile(QFile &file)
     }
 
     updateStatus();
+    update();               //add by Touch20200717
 }
 
 void MainWindow::newFile()
@@ -528,6 +540,28 @@ void MainWindow::action_file(QAction *action)
             QFile file(fileName);
             file.open(QIODevice::WriteOnly); // 只写
             saveFile(file);
+        }
+    }
+    if (action->text() == "Import Image")
+    {
+        QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
+        fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
+        fileDialog->setViewMode(QFileDialog::Detail);
+
+        QList<QUrl> urls;
+
+        fileDialog->setSidebarUrls(urls);
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Read Files"),
+                                                        "",
+                                                        tr("*.png") // 后缀必须为.png
+                                                        );
+        if (!fileName.isEmpty())
+        { // 文件有效
+            myImage *img = new myImage(AllGraphs.size(),fileName);
+            selectedIndex = AllGraphs.size(); // 更新选中图层
+            AllGraphs.push_back(img); // 将image放在最后一层
+            updateStatus();
+            update();
         }
     }
 }

@@ -23,6 +23,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include "myimage.h"
 #include "graph.h"
 #include "myellipse.h"
 #include "myrectangle.h"
@@ -109,6 +110,8 @@ private slots: // 槽函数，当某个信号被触发后会被调用
     void setColor_stroke(QColor color); // 在调色卡选择描边颜色时
     void recoverColor_fill(); // 在调色卡选择填充颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
     void recoverColor_stroke(); // 在调色卡选择描边颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
+
+//    void LoadImage();   //load image file
 private:
     Ui::MainWindow *ui;
 };

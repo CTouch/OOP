@@ -26,6 +26,7 @@ enum Shape
 { // 形状的颜色，用于规范储存、读取".oop"文件
     SHAPE_ELLIPSE, // 椭圆
     SHAPE_RECTANGLE, // 矩形
+    IMAGE,  //loaded image
     UNKOWN, // 未知
 };
 

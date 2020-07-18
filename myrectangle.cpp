@@ -9,7 +9,7 @@ myRectangle::myRectangle(int Index)
     Fill.setColor(Qt::gray);
     Fill.setStyle(Qt::SolidPattern);
     editType = DRAW; // 新建时肯定是初次绘制
-    shape = Shape::SHAPE_ELLIPSE;
+    shape = Shape::SHAPE_RECTANGLE;
 }
 
 void myRectangle::draw(QPainter &painter)

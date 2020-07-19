@@ -2,6 +2,8 @@
 #define MYIMAGE_H
 #include <QImage>
 #include <QPainter>
+#include <opencv2/opencv.hpp>
+
 #include "graph.h"
 class myImage:public Graph
 {
@@ -19,6 +21,8 @@ public:
     virtual Graph *duplicate() override; // 复制
     virtual void read(QDataStream &in) override; // 文件的读
     virtual void write(QDataStream &out) override; // 文件的写
+    virtual void showHist() override;
+    virtual void myImage2Mat(cv::Mat &target);
 private:
     QImage img;
 

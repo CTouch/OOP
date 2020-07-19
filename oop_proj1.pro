@@ -39,3 +39,25 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource/resources.qrc
+
+INCLUDEPATH += /usr/include/opencv2
+INCLUDEPATH += /usr/include/opencv
+#INCLUDEPATH += /usr/include
+
+LIBS += /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so \
+/usr/lib/x86_64-linux-gnu/libopencv_core.so \
+/usr/lib/x86_64-linux-gnu/libopencv_features2d.so \
+/usr/lib/x86_64-linux-gnu/libopencv_flann.so \
+/usr/lib/x86_64-linux-gnu/libopencv_highgui.so \
+/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so \
+/usr/lib/x86_64-linux-gnu/libopencv_imgproc.so \
+/usr/lib/x86_64-linux-gnu/libopencv_ml.so \
+/usr/lib/x86_64-linux-gnu/libopencv_objdetect.so \
+/usr/lib/x86_64-linux-gnu/libopencv_photo.so \
+/usr/lib/x86_64-linux-gnu/libopencv_shape.so \
+/usr/lib/x86_64-linux-gnu/libopencv_stitching.so \
+/usr/lib/x86_64-linux-gnu/libopencv_superres.so \
+/usr/lib/x86_64-linux-gnu/libopencv_videoio.so \
+/usr/lib/x86_64-linux-gnu/libopencv_video.so \
+/usr/lib/x86_64-linux-gnu/libopencv_videostab.so
+

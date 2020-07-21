@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>818</width>
-    <height>616</height>
+    <width>1032</width>
+    <height>678</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -165,13 +165,23 @@
      </item>
     </layout>
    </widget>
+   <widget class="DrawingBoard" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>0</y>
+      <width>581</width>
+      <height>631</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>818</width>
+     <width>1032</width>
      <height>22</height>
     </rect>
    </property>
@@ -202,6 +212,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DrawingBoard</class>
+   <extends>QWidget</extends>
+   <header location="global">drawingboard.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

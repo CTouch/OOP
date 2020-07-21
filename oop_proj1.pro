@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 QT += charts
 
 SOURCES += \
+    drawingboard.cpp \
     histwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     myrectangle.cpp
 
 HEADERS += \
+    drawingboard.h \
     graph.h \
     histwidget.h \
     mainwindow.h \

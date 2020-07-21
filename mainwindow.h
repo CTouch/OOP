@@ -28,14 +28,8 @@
 #include "myellipse.h"
 #include "myrectangle.h"
 #include "histwidget.h"
+#include "drawingboard.h"
 
-enum SelectType
-{ // 当前的操作模式
-    CURSOR,
-    ELLIPSE,
-    RECTANGLE,
-    EDIT
-};
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -24,14 +24,14 @@
    </property>
    <layout class="QVBoxLayout" name="layoutHists">
     <item>
-     <widget class="QLabel" name="G_hist">
+     <widget class="QLabel" name="R_hist">
       <property name="text">
        <string/>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="R_hist">
+     <widget class="QLabel" name="G_hist">
       <property name="text">
        <string/>
       </property>

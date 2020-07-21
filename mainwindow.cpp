@@ -562,6 +562,8 @@ void MainWindow::action_file(QAction *action)
             AllGraphs.push_back(img); // 将image放在最后一层
             updateStatus();
             update();
+
+            ShowImageHist(*img);
         }
     }
 }
@@ -741,5 +743,9 @@ void MainWindow::recoverColor_stroke()
     }
 }
 
-
-
+void MainWindow::ShowImageHist(const myImage & image)
+{
+    HistWidget *histwidget = new HistWidget(image);
+    histwidget->show();
+    histwidget->ShowAllHist();
+}

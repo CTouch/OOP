@@ -102,8 +102,7 @@ int myImage::GetMax(int a[],int len)
     return result;
 }
 
-//void myImage::
-void myImage::showHist()
+RGBHist myImage::GetHistArray()
 {
     RGBHist res;
     for(int i = 0;i < img.width();i++)
@@ -119,23 +118,10 @@ void myImage::showHist()
             res.b[blue]++;
         }
     }
-    int max_red = GetMax(res.r,MAX_VALUE_COLOR);
+    return res;
+}
 
-    myImage tp(256,256,QImage::Format_ARGB32);
-//    QImage tp(256,256,QImage::Format_ARGB32);
-//    tp.fill(Qt::black);
-    QPainter painter(&(tp.img));
-    painter.setPen(Qt::red);
-    for(int i = 0;i < 256;i++)
-    {
-        painter.drawLine(i,0,i,256.0 * res.r[i] / max_red);
-//        std::cout << res.r[i] << "\t";
-//        if(i%10 == 0)  std::cout << std::endl;
-    }
-//    std::cout << "try save hist!\n";
-//    if (tp.img.save("~/testhist.bmp","BMP"))
-//        std::cout << "Save hist!\n";
-//    else std::cout <<"failed to save hist!\n";
-    painter.end();
+void myImage::showHist()
+{
 
 }

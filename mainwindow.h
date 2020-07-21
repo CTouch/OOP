@@ -27,6 +27,7 @@
 #include "graph.h"
 #include "myellipse.h"
 #include "myrectangle.h"
+#include "histwidget.h"
 
 enum SelectType
 { // 当前的操作模式
@@ -111,6 +112,8 @@ private slots: // 槽函数，当某个信号被触发后会被调用
     void recoverColor_fill(); // 在调色卡选择填充颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
     void recoverColor_stroke(); // 在调色卡选择描边颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
 
+    //show the hist in a new widget
+    void ShowImageHist(const myImage &image);
 //    void LoadImage();   //load image file
 private:
     Ui::MainWindow *ui;

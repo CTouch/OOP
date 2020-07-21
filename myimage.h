@@ -3,20 +3,20 @@
 #include <QImage>
 #include <QPainter>
 #include <QRgb>
+#include <QtCharts>
 #include <iostream>
 #include <vector>
 //#include <QCustomPlot>
 #include "graph.h"
 
 //the max value of r/g/b
-#define MAX_VALUE_COLOR 256
+const int MAX_VALUE_COLOR = 256;
+
 class RGBHist
 {
 public:
     RGBHist(){};
     ~RGBHist(){};
-//    QVector<int> r(256);
-//    std::vector<int> r(256);
     int r[MAX_VALUE_COLOR] = {0};
     int g[MAX_VALUE_COLOR] = {0};
     int b[MAX_VALUE_COLOR] = {0};
@@ -38,7 +38,13 @@ public:
 //    void draw(QPainter &painter) override;
 public:
     virtual void draw(QPainter &painter) override; // 绘制
+
+    //get the rgb histogram in 3 arrays
+    virtual RGBHist GetHistArray();
+
+    //show the rgb histogram
     virtual void showHist() override;
+
     virtual Graph *duplicate() override; // 复制
     virtual void read(QDataStream &in) override; // 文件的读
     virtual void write(QDataStream &out) override; // 文件的写

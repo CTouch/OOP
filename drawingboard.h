@@ -24,10 +24,11 @@ private:
     bool onShift = false; // 监测shift键是否按下
     QPoint current_mouse = QPoint(-1, -1); // 当前鼠标的位置
     bool isClicking = false; // 左键是否按着（释放后才变为false）
-    int selectedIndex = -1; // 当前选中的图层
     QColor lastColor; // 选择色板前的颜色
 
 public:
+    int selectedIndex = -1; // 当前选中的图层
+
     // 储存所有图形的链表
     QList<Graph*> AllGraphs;
 
@@ -61,13 +62,16 @@ private:
     void drawAll(QPainter &painter); // 按图层顺序重新绘制链表中所有图形
     void setupMenu(); // 初始化菜单栏
     void init(); // 初始化界面
-    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
+//    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
+    void newFile(); // 新建文件，即清空
+
+public:
     void deleteGraph(); // 删除选中的图层
     void saveFile(QFile &file); // 写文件
     void readFile(QFile &file); // 读文件
-    void newFile(); // 新建文件，即清空
 
 signals:
+    void ChangedSignal();
 
 };
 

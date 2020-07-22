@@ -41,7 +41,7 @@ class MainWindow : public QMainWindow
 
 public:
     // 储存所有图形的链表
-    QList<Graph*> AllGraphs;
+//    QList<Graph*> AllGraphs;
 
     // 目前的操作模式
     SelectType selectType = CURSOR;
@@ -55,13 +55,13 @@ public:
 
 protected:
     // 监测鼠标移动
-    void mouseMoveEvent(QMouseEvent *event) override;
+//    void mouseMoveEvent(QMouseEvent *event) override;
 
     // 监测鼠标左键单击
     void mousePressEvent(QMouseEvent *event) override;
 
     // 监测鼠标左键释放
-    void mouseReleaseEvent(QMouseEvent *event) override;
+//    void mouseReleaseEvent(QMouseEvent *event) override;
 
     // 监测键盘按下
     void keyPressEvent(QKeyEvent *event) override;
@@ -76,14 +76,13 @@ private:
     bool onShift = false; // 监测shift键是否按下
     QPoint current_mouse = QPoint(-1, -1); // 当前鼠标的位置
     bool isClicking = false; // 左键是否按着（释放后才变为false）
-    int selectedIndex = -1; // 当前选中的图层
+//    int selectedIndex = -1; // 当前选中的图层
     QColor lastColor; // 选择色板前的颜色
 
 private:
     void drawAll(QPainter &painter); // 按图层顺序重新绘制链表中所有图形
     void setupMenu(); // 初始化菜单栏
     void init(); // 初始化界面
-    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
     void deleteGraph(); // 删除选中的图层
     void saveFile(QFile &file); // 写文件
     void readFile(QFile &file); // 读文件
@@ -105,6 +104,7 @@ private slots: // 槽函数，当某个信号被触发后会被调用
     void setColor_stroke(QColor color); // 在调色卡选择描边颜色时
     void recoverColor_fill(); // 在调色卡选择填充颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
     void recoverColor_stroke(); // 在调色卡选择描边颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
+    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
 
     //show the hist in a new widget
     void ShowImageHist(const myImage &image);

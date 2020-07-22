@@ -9,7 +9,6 @@ DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent)
 
 }
 
-
 void DrawingBoard::mouseMoveEvent(QMouseEvent *event)
 {
     current_mouse = event->pos();
@@ -33,14 +32,14 @@ void DrawingBoard::mousePressEvent(QMouseEvent *event)
             myEllipse *ellipse = new myEllipse(AllGraphs.size());
             selectedIndex = AllGraphs.size(); // 更新选中图层
             AllGraphs.push_back(ellipse); // 将椭圆放在最后一层
-            updateStatus();
+//            updateStatus();
         }
         if (selectType == RECTANGLE)
         { // 第一次点击, 创建矩形
             myRectangle *rectangle = new myRectangle(AllGraphs.size());
             selectedIndex = AllGraphs.size(); // 更新选中图层
             AllGraphs.push_back(rectangle); // 将矩形放在最后一层
-            updateStatus();
+//            updateStatus();
         }
         if (selectType == EDIT)
         { // 编辑图形
@@ -55,7 +54,7 @@ void DrawingBoard::mousePressEvent(QMouseEvent *event)
             }
         }
     }
-
+    emit ChangedSignal();
     isClicking = true;
 }
 
@@ -96,6 +95,9 @@ void DrawingBoard::keyReleaseEvent(QKeyEvent *event)
 void DrawingBoard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this); // 构建画笔
+//    painter.fillRect(Qt::white);
+    QBrush tpbrush(Qt::white);
+    painter.fillRect(0,0,this->width(),this->height(),tpbrush);
     drawAll(painter); // 绘制图形
 //    painter.drawImage()
 }
@@ -162,3 +164,95 @@ void DrawingBoard::drawAll(QPainter &painter)
         AllGraphs[i]->draw(painter);
     }
 }
+
+void DrawingBoard::deleteGraph()
+{ // 删除选中图形
+    if (selectedIndex >=0 && selectedIndex < AllGraphs.size())
+    { // 确实选中了图形
+        // 记录原本的操作模式
+        EditType editType = AllGraphs[selectedIndex]->editType;
+        AllGraphs.removeAt(selectedIndex);
+        // 移动后面的图层
+        for (int i = selectedIndex; i < AllGraphs.size(); ++i)
+        {
+            AllGraphs[i]->changeIndex(i);
+        }
+
+        if (selectedIndex == AllGraphs.size()) selectedIndex--;
+
+        // 菜单和图层显示发生相应的删除
+//        menu_layer->removeAction(menu_layer->actions().back());
+//        ui->index_list->removeItem(AllGraphs.size());
+//        ui->index_list->setCurrentIndex(selectedIndex);
+
+
+        if (selectedIndex >= 0 && selectedIndex < AllGraphs.size())
+        {
+            AllGraphs[selectedIndex]->editType = editType;
+            AllGraphs[selectedIndex]->isBorderVisible = true;
+        }
+        // 重新绘图
+        update();
+    }
+}
+
+void DrawingBoard::saveFile(QFile &file)
+{
+    QDataStream out(&file);
+
+    // 先储存mainwindow中的数据
+    out << (onShift = false) << current_mouse << (isClicking = false) << selectedIndex;
+    out << selectType << AllGraphs.size();
+
+    // 再储存链表中的图形
+    for (int i = 0;i < AllGraphs.size(); ++i)
+    {
+        out << AllGraphs[i]->shape;
+        AllGraphs[i]->write(out);
+    }
+    file.close();
+}
+
+void DrawingBoard::readFile(QFile &file)
+{
+    QDataStream in(&file);
+    in >> (onShift) >> current_mouse >> isClicking >> selectedIndex;
+    int size = 0;
+    in >> selectType >> size;
+    AllGraphs.clear();
+    for (int i = 0;i < size; ++i)
+    {
+        Shape shape;
+        in >> shape;
+        if (shape == Shape::SHAPE_ELLIPSE)
+        {
+            myEllipse *ellipse = new myEllipse(i);
+            ellipse->read(in);
+            AllGraphs.push_back(ellipse);
+        }
+        else if (shape == Shape::SHAPE_RECTANGLE)
+        {
+            myRectangle *rectangle = new myRectangle(i);
+            rectangle->read(in);
+            AllGraphs.push_back(rectangle);
+        }
+        else if (shape == Shape::IMAGE)
+        {
+            myImage *image = new myImage(i,in);
+            AllGraphs.push_back(image);
+        }
+    }
+    file.close(); // 关闭文件
+
+//    menu_layer->clear();
+//    ui->index_list->clear();
+//    for (int i = 0;i < size; ++i)
+//    { // 图层数目更新
+//        menu_layer->addAction(new QAction(QString::number(i), this));
+//        ui->index_list->addItem(QString::number(i));
+//    }
+
+//    updateStatus();
+    update();               //add by Touch20200717
+}
+

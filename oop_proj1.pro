@@ -22,8 +22,10 @@ SOURCES += \
     histwidget.cpp \
     main.cpp \
     mainwindow.cpp \
+    myPolygon.cpp \
     myellipse.cpp \
     myimage.cpp \
+    mypolygon.cpp \
     myrectangle.cpp
 
 HEADERS += \
@@ -33,6 +35,7 @@ HEADERS += \
     mainwindow.h \
     myellipse.h \
     myimage.h \
+    mypolygon.h \
     myrectangle.h
 
 FORMS += \

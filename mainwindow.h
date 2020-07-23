@@ -22,6 +22,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QResizeEvent>
 
 #include "myimage.h"
 #include "graph.h"
@@ -60,8 +61,8 @@ protected:
     // 监测鼠标左键单击
     void mousePressEvent(QMouseEvent *event) override;
 
-    // 监测鼠标左键释放
-//    void mouseReleaseEvent(QMouseEvent *event) override;
+    // 检测窗口大小变换
+    void resizeEvent(QResizeEvent *event) override;
 
     // 监测键盘按下
     void keyPressEvent(QKeyEvent *event) override;

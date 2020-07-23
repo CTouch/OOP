@@ -2,6 +2,7 @@
 #include "myellipse.h"
 #include "myrectangle.h"
 #include "myimage.h"
+#include <QDebug>
 
 
 DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent)
@@ -243,16 +244,6 @@ void DrawingBoard::readFile(QFile &file)
         }
     }
     file.close(); // 关闭文件
-
-//    menu_layer->clear();
-//    ui->index_list->clear();
-//    for (int i = 0;i < size; ++i)
-//    { // 图层数目更新
-//        menu_layer->addAction(new QAction(QString::number(i), this));
-//        ui->index_list->addItem(QString::number(i));
-//    }
-
-//    updateStatus();
     update();               //add by Touch20200717
 }
 

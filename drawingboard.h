@@ -11,6 +11,7 @@ enum SelectType
     CURSOR,
     ELLIPSE,
     RECTANGLE,
+    POLYGON,
     EDIT
 };
 
@@ -66,7 +67,7 @@ private:
     void newFile(); // 新建文件，即清空
 
 public:
-    void deleteGraph(); // 删除选中的图层
+    bool deleteGraph(); // 删除选中的图层
     void saveFile(QFile &file); // 写文件
     void readFile(QFile &file); // 读文件
 

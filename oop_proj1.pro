@@ -22,7 +22,6 @@ SOURCES += \
     histwidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    myPolygon.cpp \
     myellipse.cpp \
     myimage.cpp \
     mypolygon.cpp \

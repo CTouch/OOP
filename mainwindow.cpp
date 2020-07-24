@@ -36,6 +36,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     { // 删除图层
         deleteGraph();
     }
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    { // 回车键，闭合当前正在绘制的多边形
+        if (ui->drawingboard->selectedIndex >=0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
+        {
+            if (ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->shape == SHAPE_POLYGON)
+            {
+                ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->editType = CLOSING_POLYGON;
+                update();
+            }
+        }
+    }
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
@@ -62,6 +73,12 @@ void MainWindow::menu_edit_triggered(QAction *action)
     if (action->text() == "Rectangle (Q)")
     { // 创建矩形
         ui->drawingboard->selectType = RECTANGLE;
+        // 更换鼠标样式
+        ui->drawingboard->setCursor(Qt::ArrowCursor);
+    }
+    if (action->text() == "Polygon(P)")
+    { // 创建多边形
+        ui->drawingboard->selectType = POLYGON;
         // 更换鼠标样式
         ui->drawingboard->setCursor(Qt::ArrowCursor);
     }
@@ -151,6 +168,7 @@ void MainWindow::setupMenu()
     QAction *Cursor = new QAction("Cursor (V)", this);
     QAction *Ellipse = new QAction("Ellipse (E)", this);
     QAction *Rectangle = new QAction("Rectangle (Q)", this);
+    QAction *Polygon = new QAction("Polygon(P)", this);
     QAction *Move = new QAction("Move (M)", this);
     QAction *Rotate = new QAction("Rotate (R)", this);
     QAction *Duplicate = new QAction("Duplicate");
@@ -162,6 +180,7 @@ void MainWindow::setupMenu()
     Cursor->setShortcut(Qt::Key_V);
     Ellipse->setShortcut(Qt::Key_E);
     Rectangle->setShortcut(Qt::Key_Q);
+    Polygon->setShortcut(Qt::Key_P);
     Move->setShortcut(Qt::Key_M);
     Rotate->setShortcut(Qt::Key_R);
     Unselect->setShortcut(Qt::Key_U);
@@ -185,6 +204,7 @@ void MainWindow::setupMenu()
     menu_edit->addAction(Cursor);
     menu_edit->addAction(Ellipse);
     menu_edit->addAction(Rectangle);
+    menu_edit->addAction(Polygon);
     menu_edit->addAction(Move);
     menu_edit->addAction(Rotate);
     menu_edit->addAction(Duplicate);
@@ -220,7 +240,7 @@ void MainWindow::init()
     ui->scale_x->setMaximum(300);
     ui->scale_y->setMinimum(1);
     ui->scale_y->setMaximum(300);
-    ui->drawingboard->selectedIndex = 0;
+    ui->drawingboard->selectedIndex = -1;
 //    selectedIndex = 0;
 
     // 更新界面
@@ -260,11 +280,13 @@ void MainWindow::updateStatus()
 
 void MainWindow::deleteGraph()
 { // 删除选中图形
-    ui->drawingboard->deleteGraph();
-    // 菜单和图层显示发生相应的删除
-    menu_layer->removeAction(menu_layer->actions().back());
-    ui->index_list->removeItem(ui->drawingboard->AllGraphs.size());
-    ui->index_list->setCurrentIndex(ui->drawingboard->selectedIndex);
+    if (ui->drawingboard->deleteGraph())
+    {   // 成功删除了某个图形
+        // 菜单和图层显示发生相应的删除
+        menu_layer->removeAction(menu_layer->actions().back());
+        ui->index_list->removeItem(ui->drawingboard->AllGraphs.size());
+        ui->index_list->setCurrentIndex(ui->drawingboard->selectedIndex);
+    }
 }
 
 void MainWindow::saveFile(QFile &file)

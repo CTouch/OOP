@@ -1,11 +1,13 @@
 #include "drawingboard.h"
 #include "myellipse.h"
 #include "myrectangle.h"
+#include "mypolygon.h"
 #include "myimage.h"
 #include <QDebug>
 
 
-DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent)
+DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent),
+    selectedIndex(-1)
 {
 
 }
@@ -13,9 +15,10 @@ DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent)
 void DrawingBoard::mouseMoveEvent(QMouseEvent *event)
 {
     current_mouse = event->pos();
+    update();
     if (isClicking)
     { // 移动鼠标时重绘图形
-        update();
+
     }
     else
     {
@@ -28,29 +31,44 @@ void DrawingBoard::mousePressEvent(QMouseEvent *event)
     current_mouse = event->pos();
     if (!isClicking)
     {
-        if (selectType == ELLIPSE)
-        { // 第一次单击, 创建椭圆
-            myEllipse *ellipse = new myEllipse(AllGraphs.size());
-            selectedIndex = AllGraphs.size(); // 更新选中图层
-            AllGraphs.push_back(ellipse); // 将椭圆放在最后一层
-//            updateStatus();
-        }
-        if (selectType == RECTANGLE)
-        { // 第一次点击, 创建矩形
-            myRectangle *rectangle = new myRectangle(AllGraphs.size());
-            selectedIndex = AllGraphs.size(); // 更新选中图层
-            AllGraphs.push_back(rectangle); // 将矩形放在最后一层
-//            updateStatus();
-        }
-        if (selectType == EDIT)
-        { // 编辑图形
-            if (selectedIndex >= 0 && selectedIndex < AllGraphs.size())
-            {
-                if (AllGraphs[selectedIndex]->contain(current_mouse))
-                { // 判断是否为有效的操作区域
-                    AllGraphs[selectedIndex]->current_mouse = AllGraphs[selectedIndex]->last_mouse = current_mouse;
-                    // 重新绘制图形
-                    update();
+        if (event->button() == Qt::LeftButton)
+        { // 第一次按左键
+            if (selectType == ELLIPSE)
+            { // 第一次单击, 创建椭圆
+                myEllipse *ellipse = new myEllipse(AllGraphs.size());
+                selectedIndex = AllGraphs.size(); // 更新选中图层
+                AllGraphs.push_back(ellipse); // 将椭圆放在最后一层
+            }
+            if (selectType == RECTANGLE)
+            { // 第一次点击, 创建矩形
+                myRectangle *rectangle = new myRectangle(AllGraphs.size());
+                selectedIndex = AllGraphs.size(); // 更新选中图层
+                AllGraphs.push_back(rectangle); // 将矩形放在最后一层
+            }
+            if (selectType == POLYGON)
+            { // 第一次点击，创建多边形或是继续绘制多边形
+                if (selectedIndex >= 0 && selectedIndex < AllGraphs.size() && AllGraphs[selectedIndex]->shape == SHAPE_POLYGON && !AllGraphs[selectedIndex]->isClosed_poly())
+                { // 继续绘制这个多边形
+                    AllGraphs[selectedIndex]->editType = DRAW; // 修改多边形的状态为绘制，便于多边形添加一点
+                }
+                else
+                { // 创建新的多边形
+                    myPolygon *polygon = new myPolygon(AllGraphs.size());
+                    selectedIndex = AllGraphs.size(); // 更新选中图层
+                    AllGraphs.push_back(polygon); // 将矩形放在最后一层
+                }
+            }
+
+            if (selectType == EDIT)
+            { // 编辑图形
+                if (selectedIndex >= 0 && selectedIndex < AllGraphs.size())
+                {
+                    if (AllGraphs[selectedIndex]->contain(current_mouse))
+                    { // 判断是否为有效的操作区域
+                        AllGraphs[selectedIndex]->current_mouse = AllGraphs[selectedIndex]->last_mouse = current_mouse;
+                        // 重新绘制图形
+                        update();
+                    }
                 }
             }
         }
@@ -68,7 +86,10 @@ void DrawingBoard::mouseReleaseEvent(QMouseEvent *event)
     {
         if (AllGraphs[selectedIndex]->editType == DRAW)
             AllGraphs[selectedIndex]->editType = SELECTED;
-
+        if (AllGraphs[selectedIndex]->editType == HOVER_POLYGON)
+        { // 取消多边形的预览
+            AllGraphs[selectedIndex]->editType = SELECTED;
+        }
         // 防止重新选中时图形已经处于激活状态
         AllGraphs[selectedIndex]->last_mouse.setX(-1);
     }
@@ -79,10 +100,6 @@ void DrawingBoard::keyPressEvent(QKeyEvent *event)
     if (event->modifiers() == Qt::ShiftModifier)
     {
         onShift = true;
-    }
-    if (event->key() == Qt::Key_Backspace)
-    { // 删除图层
-        deleteGraph();
     }
 }
 void DrawingBoard::keyReleaseEvent(QKeyEvent *event)
@@ -100,7 +117,6 @@ void DrawingBoard::paintEvent(QPaintEvent *)
     QBrush tpbrush(Qt::white);
     painter.fillRect(0,0,this->width(),this->height(),tpbrush);
     drawAll(painter); // 绘制图形
-//    painter.drawImage()
 }
 
 void DrawingBoard::drawAll(QPainter &painter)
@@ -111,6 +127,15 @@ void DrawingBoard::drawAll(QPainter &painter)
         { // 绘制图形，需要更新鼠标位置
             AllGraphs[i]->current_mouse = current_mouse;
             AllGraphs[i]->onShift = onShift;
+        }
+        else if (selectedIndex == i && AllGraphs[i]->editType == HOVER_POLYGON)
+        { // 多边形绘制的预览
+            AllGraphs[i]->current_mouse = current_mouse;
+            AllGraphs[i]->onShift = onShift;
+        }
+        else if (selectedIndex == i && AllGraphs[i]->editType == CLOSING_POLYGON)
+        { // 多边形绘制的预览
+          // do nothing
         }
         else if (selectedIndex == i && AllGraphs[i]->editType == MOVE)
         { // 移动图形
@@ -166,7 +191,7 @@ void DrawingBoard::drawAll(QPainter &painter)
     }
 }
 
-void DrawingBoard::deleteGraph()
+bool DrawingBoard::deleteGraph()
 { // 删除选中图形
     if (selectedIndex >=0 && selectedIndex < AllGraphs.size())
     { // 确实选中了图形
@@ -194,7 +219,11 @@ void DrawingBoard::deleteGraph()
         }
         // 重新绘图
         update();
+
+        // 删除了图形
+        return true;
     }
+    return false;
 }
 
 void DrawingBoard::saveFile(QFile &file)
@@ -241,6 +270,12 @@ void DrawingBoard::readFile(QFile &file)
         {
             myImage *image = new myImage(i,in);
             AllGraphs.push_back(image);
+        }
+        else if (shape == Shape::SHAPE_POLYGON)
+        {
+            myPolygon *polygon = new myPolygon(i);
+            polygon->read(in);
+            AllGraphs.push_back(polygon);
         }
     }
     file.close(); // 关闭文件

@@ -18,7 +18,9 @@ enum EditType
     SCALE, // 放缩中
     CROP, // 裁剪中
     MOVE, // 移动中
-    DRAW // 首次 绘制中
+    DRAW,// 首次绘制中
+    CLOSING_POLYGON, // 特属于多边形的状态，按回车后封闭多边形
+    HOVER_POLYGON, // 特属于多边形的状态，还在绘制但是鼠标处于放松的状态，会预览将要绘制的边
 };
 
 
@@ -26,6 +28,7 @@ enum Shape
 { // 形状的颜色，用于规范储存、读取".oop"文件
     SHAPE_ELLIPSE, // 椭圆
     SHAPE_RECTANGLE, // 矩形
+    SHAPE_POLYGON, // 多边形
     IMAGE,  //loaded image
     UNKOWN, // 未知
 };
@@ -89,6 +92,7 @@ public: // 虚函数，对于某些子类置空，某些子类需要自己重新
     virtual void setFill(QColor &color) { } // 设置填充颜色
     virtual void setStroke(QColor &color) { } // 设置描边颜色
     virtual void setStroke(int width) { } // 设置描边宽度
+    virtual bool isClosed_poly() {return true;}// 多边形是否为闭合
     virtual QPen getStroke() {return QPen();} // 获取描边的画笔
     virtual QBrush getBrush() {return QBrush();} // 获取填充的笔刷
 

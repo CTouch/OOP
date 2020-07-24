@@ -47,9 +47,14 @@ void myImage::draw(QPainter &painter)
 
     // 储存原本的画布
     painter.save();
+
+
     // 移动、按中心旋转画布
     painter.translate(Center.x(), Center.y());
     painter.rotate(-angle);
+
+    // 裁剪画布
+    painter.setClipRect(QRect(border_tl, border_br));
 
     painter.setOpacity(Opacity/100.0); // 设置不透明度
     // 绘制

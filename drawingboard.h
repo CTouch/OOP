@@ -60,18 +60,20 @@ protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    void drawAll(QPainter &painter); // 按图层顺序重新绘制链表中所有图形
-    void setupMenu(); // 初始化菜单栏
-    void init(); // 初始化界面
+//    void setupMenu(); // 初始化菜单栏
+//    void init(); // 初始化界面
 //    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
-    void newFile(); // 新建文件，即清空
+//    void newFile(); // 新建文件，即清空
 
 public:
+    void drawAll(QPainter &painter,bool no_border = false); // 按图层顺序重新绘制链表中所有图形,maybe_border决定是否可能绘制graph的border，默认为true
     bool deleteGraph(); // 删除选中的图层
     void saveFile(QFile &file); // 写文件
     void readFile(QFile &file); // 读文件
 
 signals:
+
+    //如果drawingboard上发生修改，则向主窗口发送signal，进行updatestatus()
     void ChangedSignal();
 
 };

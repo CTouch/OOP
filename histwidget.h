@@ -18,26 +18,23 @@ class HistWidget : public QWidget
 
 public:
     explicit HistWidget(QWidget *parent = nullptr);
+
+    //根据image得到直方图
     HistWidget(const myImage &image, QWidget *parent = nullptr);
+
     ~HistWidget();
 
 
 public:
-
     //show all histograms
     void ShowAllHist();
-protected:
-    void paintEvent(QPaintEvent *) override;
 
 private:
-    //show one histogram on a qlabel
+    //将直方图数据hist[]用颜色color展示在label上
     void ShowOneHist(const int hist[],QLabel *label,const Qt::GlobalColor & color);
 private:
     Ui::HistWidget *ui;
-    myImage image;
-//    const QPoint TopLeft;
-//    const QRect HistSize;
-//    const int Interval = 5;
+    myImage image;//将根据image获得直方图
 };
 
 #endif // HISTWIDGET_H

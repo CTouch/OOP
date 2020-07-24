@@ -113,13 +113,12 @@ void DrawingBoard::keyReleaseEvent(QKeyEvent *event)
 void DrawingBoard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this); // 构建画笔
-//    painter.fillRect(Qt::white);
     QBrush tpbrush(Qt::white);
-    painter.fillRect(0,0,this->width(),this->height(),tpbrush);
+    painter.fillRect(0,0,this->width(),this->height(),tpbrush);//绘制白色背景
     drawAll(painter); // 绘制图形
 }
 
-void DrawingBoard::drawAll(QPainter &painter)
+void DrawingBoard::drawAll(QPainter &painter,bool no_border)
 {
     for (int i = 0;i < AllGraphs.size(); ++i)
     {

@@ -223,7 +223,8 @@ void MainWindow::setupMenu()
     connect(menu_edit, SIGNAL(triggered(QAction *)), this, SLOT(menu_edit_triggered(QAction *)));
     connect(menu_layer, SIGNAL(triggered(QAction *)), this, SLOT(changeIndex(QAction *)));
     connect(ui->drawingboard, &DrawingBoard::ChangedSignal, this, &MainWindow::updateStatus);
-
+    connect(ui->buttonShowDraingBoardHist,&QPushButton::clicked,this,&MainWindow::ShowDrawingBoardHist);
+    connect(ui->buttonShowCurrentlayerHist,&QPushButton::clicked,this,&MainWindow::ShowCurrentLayerHist);
 //    connect(ui->drawingboard,SIGNAL(ui->drawingboard->ChangedSignal()),this,SLOT(updateStatus()));
 }
 
@@ -412,7 +413,7 @@ void MainWindow::action_file(QAction *action)
             updateStatus();
             ui->drawingboard->update();
 
-            ShowImageHist(*img);
+            ShowImageHist(fileName,*img);
         }
     }
 }
@@ -592,9 +593,38 @@ void MainWindow::recoverColor_stroke()
     }
 }
 
-void MainWindow::ShowImageHist(const myImage & image)
+void MainWindow::ShowImageHist(const QString & name,const myImage & image)
 {
     HistWidget *histwidget = new HistWidget(image);
+    histwidget->setWindowTitle(name);
     histwidget->show();
     histwidget->ShowAllHist();
+}
+
+void MainWindow::ShowDrawingBoardHist()
+{
+    myImage tp(this->ui->drawingboard->width(),this->ui->drawingboard->height());   //设置画布大小为drawingborad大小
+    QPainter painter(&(tp.img));                //构建画笔
+    this->ui->drawingboard->drawAll(painter);   //将所有图层绘制在画布上
+    HistWidget *histwidget = new HistWidget(tp);    //new直方图展示窗口
+    histwidget->setWindowTitle("Drawing Board");    //设置标题
+    histwidget->show();                             //打开直方图展示窗口
+    histwidget->ShowAllHist();                      //展示drawingborad的直方图
+}
+
+void MainWindow::ShowCurrentLayerHist()
+{
+    if (!(ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size()))    //如果未选择
+    {
+
+        return;
+    }
+    int currentIndex = this->ui->drawingboard->selectedIndex;
+    myImage tp(this->ui->drawingboard->width(),this->ui->drawingboard->height());   //设置画布大小为drawingborad大小
+    QPainter painter(&(tp.img));                //构建画笔
+    this->ui->drawingboard->AllGraphs[currentIndex]->draw(painter);   //将当前图层绘制在画布上
+    HistWidget *histwidget = new HistWidget(tp);    //new直方图展示窗口
+    histwidget->setWindowTitle("Layer " + QString::number(currentIndex));    //设置标题
+    histwidget->show();                             //打开直方图展示窗口
+    histwidget->ShowAllHist();                      //展示当前图层的直方图
 }

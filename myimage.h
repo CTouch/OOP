@@ -17,6 +17,7 @@ class RGBHist
 public:
     RGBHist(){};
     ~RGBHist(){};
+    //三种颜色的直方图数据
     int r[MAX_VALUE_COLOR] = {0};
     int g[MAX_VALUE_COLOR] = {0};
     int b[MAX_VALUE_COLOR] = {0};
@@ -28,7 +29,7 @@ class myImage:public Graph
 public:
     myImage();
     //initial a (width * height) image filled with black
-    myImage(int width,int height,QImage::Format);
+    myImage(int width,int height,QImage::Format = QImage::Format_ARGB32);
 
     //load image from .png file
     myImage(int index,const QString & FliePath);
@@ -42,15 +43,15 @@ public:
     //get the rgb histogram in 3 arrays
     virtual RGBHist GetHistArray();
 
-    //show the rgb histogram
-    virtual void showHist() override;
-
     virtual Graph *duplicate() override; // 复制
     virtual void read(QDataStream &in) override; // 文件的读
     virtual void write(QDataStream &out) override; // 文件的写
-private:
-    QImage img;
 
+public:
+    QImage img;     //图像信息
+
+private:
+    //在长度为len的数组a中找到最大值并返回
     int GetMax(int a[],int len);
 
 protected:

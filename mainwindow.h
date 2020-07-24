@@ -107,9 +107,12 @@ private slots: // 槽函数，当某个信号被触发后会被调用
     void recoverColor_stroke(); // 在调色卡选择描边颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
     void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
 
-    //show the hist in a new widget
-    void ShowImageHist(const myImage &image);
-//    void LoadImage();   //load image file
+    //show the histogram in a new widget
+    void ShowImageHist(const QString & name, const myImage &image);
+    //show the histogram of the drawing board (at current time)
+    void ShowDrawingBoardHist();
+    //展示当前图层的直方图
+    void ShowCurrentLayerHist();
 private:
     Ui::MainWindow *ui;
 };

@@ -283,6 +283,6 @@ void DrawingBoard::readFile(QFile &file)
         }
     }
     file.close(); // 关闭文件
-    update();               //add by Touch20200717
+    update();
 }
 

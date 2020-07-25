@@ -36,7 +36,7 @@ public:
 
     //read from .oop file
     myImage(int index,QDataStream &in);
-//    void draw(QPainter &painter) override;
+
 public:
     virtual void draw(QPainter &painter) override; // 绘制
 

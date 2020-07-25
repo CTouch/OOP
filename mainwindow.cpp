@@ -159,8 +159,7 @@ void MainWindow::setupMenu()
     QAction *open_file = new QAction("Open"); // 打开oop文件
     QAction *save_file = new QAction("Save"); // 保存oop文件
     QAction *import_image = new QAction("Import Image"); //import .png files 20200718
-
-//    QAction *import_file = new QAction("Import"); // 导入oop文件或图像文件，不会覆盖现在的内容
+    QAction *export_image = new QAction("Export Image");
 
 
 
@@ -198,9 +197,9 @@ void MainWindow::setupMenu()
     menu_file->addAction(new_file);
     menu_file->addAction(open_file);
     menu_file->addAction(save_file);
-    menu_file->addAction(import_image);         //add by touch 20200718
+    menu_file->addAction(import_image);
+    menu_file->addAction(export_image);
 
-//    menu_edit->addAction(import_file);
     menu_edit->addAction(Cursor);
     menu_edit->addAction(Ellipse);
     menu_edit->addAction(Rectangle);
@@ -225,7 +224,6 @@ void MainWindow::setupMenu()
     connect(ui->drawingboard, &DrawingBoard::ChangedSignal, this, &MainWindow::updateStatus);
     connect(ui->buttonShowDraingBoardHist,&QPushButton::clicked,this,&MainWindow::ShowDrawingBoardHist);
     connect(ui->buttonShowCurrentlayerHist,&QPushButton::clicked,this,&MainWindow::ShowCurrentLayerHist);
-//    connect(ui->drawingboard,SIGNAL(ui->drawingboard->ChangedSignal()),this,SLOT(updateStatus()));
 }
 
 void MainWindow::init()
@@ -414,6 +412,24 @@ void MainWindow::action_file(QAction *action)
             ui->drawingboard->update();
 
             ShowImageHist(fileName,*img);
+        }
+    }
+    if(action->text() == "Export Image")
+    {
+        QFileDialog *fileDialog = new QFileDialog(this);
+        fileDialog->setFileMode(QFileDialog::AnyFile); // 选择任意的文件，存在或自定义
+        fileDialog->setViewMode(QFileDialog::Detail);
+
+        QList<QUrl> urls;
+
+        fileDialog->setSidebarUrls(urls);
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save Files"),
+                                                        "",
+                                                        tr("*.png")
+                                                        );
+        if (!fileName.isEmpty())
+        {
+            ExportImageFile(fileName);
         }
     }
 }
@@ -605,7 +621,8 @@ void MainWindow::ShowDrawingBoardHist()
 {
     myImage tp(this->ui->drawingboard->width(),this->ui->drawingboard->height());   //设置画布大小为drawingborad大小
     QPainter painter(&(tp.img));                //构建画笔
-    this->ui->drawingboard->drawAll(painter);   //将所有图层绘制在画布上
+    this->ui->drawingboard->drawAll(painter,true);   //将所有图层绘制在画布上
+
     HistWidget *histwidget = new HistWidget(tp);    //new直方图展示窗口
     histwidget->setWindowTitle("Drawing Board");    //设置标题
     histwidget->show();                             //打开直方图展示窗口
@@ -620,11 +637,23 @@ void MainWindow::ShowCurrentLayerHist()
         return;
     }
     int currentIndex = this->ui->drawingboard->selectedIndex;
+    this->ui->drawingboard->AllGraphs[currentIndex]->isBorderVisible = false;       //不绘制边框
+
     myImage tp(this->ui->drawingboard->width(),this->ui->drawingboard->height());   //设置画布大小为drawingborad大小
-    QPainter painter(&(tp.img));                //构建画笔
-    this->ui->drawingboard->AllGraphs[currentIndex]->draw(painter);   //将当前图层绘制在画布上
+    QPainter painter(&(tp.img));                    //构建画笔
+    this->ui->drawingboard->AllGraphs[currentIndex]->draw(painter);                 //将当前图层绘制在画布上
+
     HistWidget *histwidget = new HistWidget(tp);    //new直方图展示窗口
-    histwidget->setWindowTitle("Layer " + QString::number(currentIndex));    //设置标题
+    histwidget->setWindowTitle("Layer " + QString::number(currentIndex));           //设置标题
     histwidget->show();                             //打开直方图展示窗口
     histwidget->ShowAllHist();                      //展示当前图层的直方图
+}
+
+void MainWindow::ExportImageFile(const QString & FileName)
+{
+    myImage tp(this->ui->drawingboard->width(),this->ui->drawingboard->height(),Qt::white);   //设置画布大小为drawingborad大小,且背景为白色
+    QPainter painter(&(tp.img));                    //构建画笔
+    this->ui->drawingboard->drawAll(painter,true);  //将所有图层绘制在画布上
+//    FileName.
+    tp.img.save(FileName);
 }

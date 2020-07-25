@@ -120,6 +120,11 @@ void DrawingBoard::paintEvent(QPaintEvent *)
 
 void DrawingBoard::drawAll(QPainter &painter,bool no_border)
 {
+    //若不是绘制在drawing board上，则不需要绘制边框
+    if(no_border)
+    {
+        selectedIndex = -1;     //实现方法为取消选择
+    }
     for (int i = 0;i < AllGraphs.size(); ++i)
     {
         if (selectedIndex == i && AllGraphs[i]->editType == DRAW)

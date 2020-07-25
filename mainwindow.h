@@ -89,6 +89,9 @@ private:
     void readFile(QFile &file); // 读文件
     void newFile(); // 新建文件，即清空
 
+    //导出为图像文件
+    void ExportImageFile(const QString & FileName);
+
 private slots: // 槽函数，当某个信号被触发后会被调用
     void menu_edit_triggered(QAction *action); // 当"编辑"菜单栏的内容被触发时，更新编辑模式
     void changeIndex(QAction *action); // 图层关系发生变化时，实时更新

@@ -5,11 +5,11 @@ myImage::myImage()
 {
 }
 
-myImage::myImage(int width,int height,QImage::Format format)
+myImage::myImage(int width,int height, Qt::GlobalColor color, QImage::Format format)
     :img(width,height,format)
 {
-    //初始化为纯黑色
-    img.fill(Qt::black);
+
+    img.fill(color);
     shape = Shape::IMAGE;
     graph_width = img.width();
     graph_height = img.height();

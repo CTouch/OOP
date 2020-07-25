@@ -29,7 +29,7 @@ class myImage:public Graph
 public:
     myImage();
     //initial a (width * height) image filled with black
-    myImage(int width,int height,QImage::Format = QImage::Format_ARGB32);
+    myImage(int width,int height,Qt::GlobalColor color = Qt::black,QImage::Format = QImage::Format_ARGB32);
 
     //load image from .png file
     myImage(int index,const QString & FliePath);

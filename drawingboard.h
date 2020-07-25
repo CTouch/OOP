@@ -30,8 +30,8 @@ private:
     QColor lastColor; // 选择色板前的颜色
 
 public:
-    bool UnsavedChange = false;          //是否有未保存的修改
-    bool doneFirstPaintevent = false;    //第一次绘制是否已经完成
+//    bool UnsavedChange = false;          //是否有未保存的修改
+//    bool doneFirstPaintevent = false;    //第一次绘制是否已经完成
 
     int selectedIndex = -1; // 当前选中的图层
 

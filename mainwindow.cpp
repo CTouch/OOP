@@ -315,9 +315,9 @@ void MainWindow::newFile()
         ui->drawingboard->selectedIndex = 0;
         deleteGraph();
     }
-    //第一次修改未完成，不存在未保存的修改
-    ui->drawingboard->doneFirstPaintevent = false;
-    ui->drawingboard->UnsavedChange = false;
+
+//    ui->drawingboard->doneFirstPaintevent = false;
+//    ui->drawingboard->UnsavedChange = false;
 }
 
 void MainWindow::changeIndex(QAction *action)
@@ -349,47 +349,26 @@ void MainWindow::action_file(QAction *action)
 {
     if (action->text() == "New")
     {
-        //如果存在未保存的修改
-        if(ui->drawingboard->UnsavedChange)
-        {
-            //弹出窗口
-            DialogChecktoSave *dialog = new DialogChecktoSave(this);
-            dialog->setAttribute(Qt::WA_DeleteOnClose,true);        //关闭时delete
-            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::SaveChangeAndNew);
-            connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,&MainWindow::NottoSaveChangeAndNew);
-            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::CancelDialogChecktoSave);
-            dialog->exec();
-        }
-        else
-        {
-            newFile();
-            updateStatus();
-        }
+        //弹出窗口
+        DialogChecktoSave *dialog = new DialogChecktoSave(this);
+        dialog->setAttribute(Qt::WA_DeleteOnClose,true);        //关闭时delete
+        connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::SaveChangeAndNew);
+        connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,&MainWindow::NottoSaveChangeAndNew);
+        connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::CancelDialogChecktoSave);
+        dialog->exec();
     }
     if (action->text() == "Open")
     {
-        //如果存在未保存的修改
-        if(ui->drawingboard->UnsavedChange)
-        {
-            //弹出窗口
-            DialogChecktoSave *dialog = new DialogChecktoSave(this);
-            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::SaveChangeAndOpen);
-            connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,&MainWindow::NottoSaveChangeAndOpen);
-            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::CancelDialogChecktoSave);
-            dialog->exec();
-        }
-        else
-        {
-            ActionRead();
-        }
+        //弹出窗口
+        DialogChecktoSave *dialog = new DialogChecktoSave(this);
+        connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::SaveChangeAndOpen);
+        connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,&MainWindow::NottoSaveChangeAndOpen);
+        connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::CancelDialogChecktoSave);
+        dialog->exec();
     }
     if (action->text() == "Save")
     {
-        if(ActionSave())
-        {
-            ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
-            ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
-        }
+        if(ActionSave()){}
     }
     if (action->text() == "Import Image")
     {
@@ -682,8 +661,8 @@ bool MainWindow::ActionSave()
         QFile file(fileName);
         file.open(QIODevice::WriteOnly); // 只写
         saveFile(file);
-        ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
-        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
+//        ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
+//        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
         return true;
     }
     return false;
@@ -707,8 +686,8 @@ void MainWindow::ActionRead()
         QFile file(fileName);
         file.open(QIODevice::ReadOnly); // 只读文件
         readFile(file); // 读取文件
-        ui->drawingboard->doneFirstPaintevent = false;        //读取后，将第一次paintevent视为未完成
-        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
+//        ui->drawingboard->doneFirstPaintevent = false;        //读取后，将第一次paintevent视为未完成
+//        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
     }
 }
 

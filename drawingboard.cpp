@@ -121,14 +121,14 @@ void DrawingBoard::paintEvent(QPaintEvent *)
         std::cout << "DrawingBoard PaintEvent Count: " << count_paint_event << std::endl;
         count_paint_event++;
     #endif
-    if(doneFirstPaintevent)    //如果此前已经完成第一次paintevent，说明存在未保存的修改
-    {
-        UnsavedChange = true;
-    }
-    else
-    {
-        doneFirstPaintevent = true;
-    }
+//    if(doneFirstPaintevent)    //如果此前已经完成第一次paintevent，说明存在未保存的修改
+//    {
+//        UnsavedChange = true;
+//    }
+//    else
+//    {
+//        doneFirstPaintevent = true;
+//    }
     QPainter painter(this); // 构建画笔
     QBrush tpbrush(Qt::white);
     painter.fillRect(0,0,this->width(),this->height(),tpbrush);//绘制白色背景

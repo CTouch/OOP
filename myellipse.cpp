@@ -45,7 +45,6 @@ void myEllipse::draw(QPainter &painter)
     // 根据裁剪比例确定边框
     updateBorder();
 
-
     // 储存原本的画笔
     QPen original_pen = painter.pen();
 
@@ -117,6 +116,7 @@ void myEllipse::write(QDataStream &out)
     out << scale_x << scale_y << Center << graph_width << graph_height;
     out << Fill << Stroke << border_tl << border_br;
 }
+
 
 QBrush myEllipse::getBrush()
 { // 返回填充笔刷

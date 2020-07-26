@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[26];
-    char stringdata0[430];
+    QByteArrayData data[29];
+    char stringdata0[477];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -56,8 +56,11 @@ QT_MOC_LITERAL(20, 351, 17), // "recoverColor_fill"
 QT_MOC_LITERAL(21, 369, 19), // "recoverColor_stroke"
 QT_MOC_LITERAL(22, 389, 12), // "updateStatus"
 QT_MOC_LITERAL(23, 402, 13), // "ShowImageHist"
-QT_MOC_LITERAL(24, 416, 7), // "myImage"
-QT_MOC_LITERAL(25, 424, 5) // "image"
+QT_MOC_LITERAL(24, 416, 4), // "name"
+QT_MOC_LITERAL(25, 421, 7), // "myImage"
+QT_MOC_LITERAL(26, 429, 5), // "image"
+QT_MOC_LITERAL(27, 435, 20), // "ShowDrawingBoardHist"
+QT_MOC_LITERAL(28, 456, 20) // "ShowCurrentLayerHist"
 
     },
     "MainWindow\0menu_edit_triggered\0\0"
@@ -71,8 +74,9 @@ QT_MOC_LITERAL(25, 424, 5) // "image"
     "on_scale_y_valueChanged\0on_scale_lock_clicked\0"
     "setColor_fill\0color\0setColor_stroke\0"
     "recoverColor_fill\0recoverColor_stroke\0"
-    "updateStatus\0ShowImageHist\0myImage\0"
-    "image"
+    "updateStatus\0ShowImageHist\0name\0myImage\0"
+    "image\0ShowDrawingBoardHist\0"
+    "ShowCurrentLayerHist"
 };
 #undef QT_MOC_LITERAL
 
@@ -82,7 +86,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -90,23 +94,25 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   99,    2, 0x08 /* Private */,
-       5,    1,  102,    2, 0x08 /* Private */,
-       6,    1,  105,    2, 0x08 /* Private */,
-       7,    1,  108,    2, 0x08 /* Private */,
-       9,    0,  111,    2, 0x08 /* Private */,
-      10,    0,  112,    2, 0x08 /* Private */,
-      11,    1,  113,    2, 0x08 /* Private */,
-      12,    1,  116,    2, 0x08 /* Private */,
-      14,    1,  119,    2, 0x08 /* Private */,
-      15,    1,  122,    2, 0x08 /* Private */,
-      16,    0,  125,    2, 0x08 /* Private */,
-      17,    1,  126,    2, 0x08 /* Private */,
-      19,    1,  129,    2, 0x08 /* Private */,
-      20,    0,  132,    2, 0x08 /* Private */,
-      21,    0,  133,    2, 0x08 /* Private */,
-      22,    0,  134,    2, 0x08 /* Private */,
-      23,    1,  135,    2, 0x08 /* Private */,
+       1,    1,  109,    2, 0x08 /* Private */,
+       5,    1,  112,    2, 0x08 /* Private */,
+       6,    1,  115,    2, 0x08 /* Private */,
+       7,    1,  118,    2, 0x08 /* Private */,
+       9,    0,  121,    2, 0x08 /* Private */,
+      10,    0,  122,    2, 0x08 /* Private */,
+      11,    1,  123,    2, 0x08 /* Private */,
+      12,    1,  126,    2, 0x08 /* Private */,
+      14,    1,  129,    2, 0x08 /* Private */,
+      15,    1,  132,    2, 0x08 /* Private */,
+      16,    0,  135,    2, 0x08 /* Private */,
+      17,    1,  136,    2, 0x08 /* Private */,
+      19,    1,  139,    2, 0x08 /* Private */,
+      20,    0,  142,    2, 0x08 /* Private */,
+      21,    0,  143,    2, 0x08 /* Private */,
+      22,    0,  144,    2, 0x08 /* Private */,
+      23,    2,  145,    2, 0x08 /* Private */,
+      27,    0,  150,    2, 0x08 /* Private */,
+      28,    0,  151,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
@@ -125,7 +131,9 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 24,   25,
+    QMetaType::Void, QMetaType::QString, 0x80000000 | 25,   24,   26,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -152,7 +160,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 13: _t->recoverColor_fill(); break;
         case 14: _t->recoverColor_stroke(); break;
         case 15: _t->updateStatus(); break;
-        case 16: _t->ShowImageHist((*reinterpret_cast< const myImage(*)>(_a[1]))); break;
+        case 16: _t->ShowImageHist((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const myImage(*)>(_a[2]))); break;
+        case 17: _t->ShowDrawingBoardHist(); break;
+        case 18: _t->ShowCurrentLayerHist(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -212,13 +222,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 19;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 19;
     }
     return _id;
 }

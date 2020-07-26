@@ -108,6 +108,7 @@ public: // 所有以Graph为基类的图形有相同实现方式的方法
 protected:
     inline void updateBorder(); // 根据裁切比例确定边框
     inline void updateCropRatios(); // 根据边框确定裁切比例
+    inline bool base_equal(const Graph& graph); // 判断基类包含属性是否相同，用于简化bool operator==
 };
 
 
@@ -309,4 +310,31 @@ inline void Graph::updateCropRatios()
         if (crop_ratios[i] <= -1.0) crop_ratios[i] = -1.0;
     }
 }
+
+inline bool Graph::base_equal(const Graph &graph)
+{
+    return (last_mouse == graph.last_mouse) &&
+           (current_mouse == graph.current_mouse) &&
+           (angle == graph.angle) &&
+           (Index == graph.Index) &&
+//           (editType == graph.editType) &&
+           (Opacity == graph.Opacity) &&
+//           (isBorderVisible == graph.isBorderVisible) &&
+//           (onShift == graph.onShift) &&
+           (shape == graph.shape) &&
+           qFuzzyCompare(scale_x, graph.scale_x) && // 等价于(scale_x == graph.scale_x)的功能 ，用于浮点数判断相等
+           qFuzzyCompare(scale_y, graph.scale_y) &&
+           qFuzzyCompare(stored_angle, graph.stored_angle) &&
+           (Center == graph.Center) &&
+           (graph_width == graph.graph_width) &&
+           (graph_height == graph.graph_height) &&
+           (border_tl == graph.border_tl) &&
+           (border_br == graph.border_br) &&
+           (crop_ratios == nullptr) ? (graph.crop_ratios == nullptr) : (graph.crop_ratios != nullptr
+                                        && qFuzzyCompare(crop_ratios[0], graph.crop_ratios[0])
+                                        && qFuzzyCompare(crop_ratios[1], graph.crop_ratios[1])
+                                        && qFuzzyCompare(crop_ratios[2], graph.crop_ratios[2])
+                                        && qFuzzyCompare(crop_ratios[3], graph.crop_ratios[13]));
+}
+
 #endif // GRAPH_H

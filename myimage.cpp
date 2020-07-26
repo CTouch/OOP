@@ -136,3 +136,8 @@ RGBHist myImage::GetHistArray()
     }
     return res;                 //返回结果
 }
+
+bool myImage::operator ==(const myImage & a)
+{
+    return (a.img == img);
+}

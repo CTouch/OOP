@@ -137,3 +137,8 @@ QPen myEllipse::getStroke()
 { // 返回描边画笔
     return Stroke;
 }
+
+bool myEllipse::operator ==(const myEllipse &ellipse) const
+{
+    return Fill == ellipse.Fill && Stroke == ellipse.Stroke;
+}

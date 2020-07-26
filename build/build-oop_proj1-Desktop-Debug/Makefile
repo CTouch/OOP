@@ -768,12 +768,17 @@ oop_proj1.app/Contents/Resources/empty.lproj:
 oop_proj1.app/Contents/Info.plist: 
 	@test -d oop_proj1.app/Contents || mkdir -p oop_proj1.app/Contents
 	@$(DEL_FILE) oop_proj1.app/Contents/Info.plist
-	@sed -e "s,@SHORT_VERSION@,1.0,g" -e "s,\$${QMAKE_SHORT_VERSION},1.0,g" -e "s,@FULL_VERSION@,1.0.0,g" -e "s,\$${QMAKE_FULL_VERSION},1.0.0,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" -e "s,@BUNDLEIDENTIFIER@,com.NAN.oop-proj1,g" -e "s,\$${PRODUCT_BUNDLE_IDENTIFIER},com.NAN.oop-proj1,g" -e "s,\$${MACOSX_DEPLOYMENT_TARGET},10.13,g" -e "s,\$${IPHONEOS_DEPLOYMENT_TARGET},,g" -e "s,\$${TVOS_DEPLOYMENT_TARGET},,g" -e "s,\$${WATCHOS_DEPLOYMENT_TARGET},,g" -e "s,@ICON@,,g" -e "s,\$${ASSETCATALOG_COMPILER_APPICON_NAME},,g" -e "s,@EXECUTABLE@,oop_proj1,g" -e "s,@LIBRARY@,oop_proj1,g" -e "s,\$${EXECUTABLE_NAME},oop_proj1,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" /usr/local/Cellar/qt/5.14.1/mkspecs/macx-clang/Info.plist.app >oop_proj1.app/Contents/Info.plist
+	@sed -e "s,@SHORT_VERSION@,1.0,g" -e "s,\$${QMAKE_SHORT_VERSION},1.0,g" -e "s,@FULL_VERSION@,1.0.0,g" -e "s,\$${QMAKE_FULL_VERSION},1.0.0,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" -e "s,@BUNDLEIDENTIFIER@,com.NAN.oop-proj1,g" -e "s,\$${PRODUCT_BUNDLE_IDENTIFIER},com.NAN.oop-proj1,g" -e "s,\$${MACOSX_DEPLOYMENT_TARGET},10.13,g" -e "s,\$${IPHONEOS_DEPLOYMENT_TARGET},,g" -e "s,\$${TVOS_DEPLOYMENT_TARGET},,g" -e "s,\$${WATCHOS_DEPLOYMENT_TARGET},,g" -e "s,@ICON@,icon.rc,g" -e "s,\$${ASSETCATALOG_COMPILER_APPICON_NAME},icon.rc,g" -e "s,@EXECUTABLE@,oop_proj1,g" -e "s,@LIBRARY@,oop_proj1,g" -e "s,\$${EXECUTABLE_NAME},oop_proj1,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" /usr/local/Cellar/qt/5.14.1/mkspecs/macx-clang/Info.plist.app >oop_proj1.app/Contents/Info.plist
+oop_proj1.app/Contents/Resources/icon.rc: ../../resource/icon.rc
+	@test -d oop_proj1.app/Contents/Resources/ || mkdir -p oop_proj1.app/Contents/Resources/
+	@$(DEL_FILE) oop_proj1.app/Contents/Resources/icon.rc
+	@$(COPY_FILE) ../../resource/icon.rc oop_proj1.app/Contents/Resources/icon.rc
 
 all: Makefile \
 		oop_proj1.app/Contents/PkgInfo \
 		oop_proj1.app/Contents/Resources/empty.lproj \
-		oop_proj1.app/Contents/Info.plist oop_proj1.app/Contents/MacOS/oop_proj1
+		oop_proj1.app/Contents/Info.plist \
+		oop_proj1.app/Contents/Resources/icon.rc oop_proj1.app/Contents/MacOS/oop_proj1
 
 dist: distdir FORCE
 	(cd `dirname $(DISTDIR)` && $(TAR) $(DISTNAME).tar $(DISTNAME) && $(COMPRESS) $(DISTNAME).tar) && $(MOVE) `dirname $(DISTDIR)`/$(DISTNAME).tar.gz . && $(DEL_FILE) -r $(DISTDIR)
@@ -1132,8 +1137,8 @@ drawingboard.o: ../../drawingboard.cpp ../../drawingboard.h \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qrandom.h \
 		../../myrectangle.h \
 		../../mypolygon.h \
-		/usr/local/Cellar/qt/5.14.1/lib/QtGui.framework/Headers/QPolygon \
-		/usr/local/Cellar/qt/5.14.1/lib/QtGui.framework/Headers/qpolygon.h \
+		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/QList \
+		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qlist.h \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/QSharedPointer \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qsharedpointer.h \
 		../../myimage.h \
@@ -1635,8 +1640,8 @@ mypolygon.o: ../../mypolygon.cpp ../../mypolygon.h \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qdebug.h \
 		/usr/local/Cellar/qt/5.14.1/lib/QtGui.framework/Headers/QPixmap \
 		/usr/local/Cellar/qt/5.14.1/lib/QtGui.framework/Headers/qpixmap.h \
-		/usr/local/Cellar/qt/5.14.1/lib/QtGui.framework/Headers/QPolygon \
-		/usr/local/Cellar/qt/5.14.1/lib/QtGui.framework/Headers/qpolygon.h \
+		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/QList \
+		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qlist.h \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qrandom.h \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/QSharedPointer \
 		/usr/local/Cellar/qt/5.14.1/lib/QtCore.framework/Headers/qsharedpointer.h

@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -20,7 +21,7 @@ QT_BEGIN_NAMESPACE
 class Ui_HistWidget
 {
 public:
-    QWidget *verticalLayoutWidget;
+    QGridLayout *gridLayout;
     QVBoxLayout *layoutHists;
     QLabel *R_hist;
     QLabel *G_hist;
@@ -31,26 +32,27 @@ public:
         if (HistWidget->objectName().isEmpty())
             HistWidget->setObjectName(QString::fromUtf8("HistWidget"));
         HistWidget->resize(534, 693);
-        verticalLayoutWidget = new QWidget(HistWidget);
-        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(30, 30, 481, 641));
-        layoutHists = new QVBoxLayout(verticalLayoutWidget);
+        gridLayout = new QGridLayout(HistWidget);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        layoutHists = new QVBoxLayout();
         layoutHists->setObjectName(QString::fromUtf8("layoutHists"));
-        layoutHists->setContentsMargins(0, 0, 0, 0);
-        R_hist = new QLabel(verticalLayoutWidget);
+        R_hist = new QLabel(HistWidget);
         R_hist->setObjectName(QString::fromUtf8("R_hist"));
 
         layoutHists->addWidget(R_hist);
 
-        G_hist = new QLabel(verticalLayoutWidget);
+        G_hist = new QLabel(HistWidget);
         G_hist->setObjectName(QString::fromUtf8("G_hist"));
 
         layoutHists->addWidget(G_hist);
 
-        B_hist = new QLabel(verticalLayoutWidget);
+        B_hist = new QLabel(HistWidget);
         B_hist->setObjectName(QString::fromUtf8("B_hist"));
 
         layoutHists->addWidget(B_hist);
+
+
+        gridLayout->addLayout(layoutHists, 0, 0, 1, 1);
 
 
         retranslateUi(HistWidget);

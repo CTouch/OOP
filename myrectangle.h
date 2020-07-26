@@ -23,6 +23,7 @@ public: // 基类纯虚函数的继承
     void write(QDataStream &out) override;
     QBrush getBrush() override;
     QPen getStroke() override;
+    bool operator == (const myRectangle& rectangle) const;
 
 private: // 私有成员
     QBrush Fill; // 填充笔刷

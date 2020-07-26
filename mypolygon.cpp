@@ -254,6 +254,17 @@ QPen myPolygon::getStroke()
     return Stroke;
 }
 
+bool myPolygon::operator ==(const myPolygon &polygon) const
+{
+    return (point_list == polygon.point_list) &&
+           (isClosed == polygon.isClosed) &&
+           (Stroke == polygon.Stroke) &&
+           (min_x == polygon.min_x) &&
+           (max_x == polygon.max_x) &&
+           (min_y == polygon.min_y) &&
+           (max_y == polygon.max_y);
+}
+
 
 
 

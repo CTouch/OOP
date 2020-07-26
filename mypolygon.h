@@ -27,6 +27,7 @@ public: // 基类纯虚函数的继承
     bool isClosed_poly() override;
     QBrush getBrush() override;
     QPen getStroke() override;
+    bool operator == (const myPolygon& polygon) const;
 private: // 私有成员
     QPolygon point_list; // 多边形点集，有序，记录相对中心的坐标
     bool isClosed; // 是否闭合

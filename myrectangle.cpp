@@ -123,3 +123,8 @@ QPen myRectangle::getStroke()
 { // 返回描边画笔
     return Stroke;
 }
+
+bool myRectangle::operator ==(const myRectangle &rectangle) const
+{
+    return Fill == rectangle.Fill && Stroke == rectangle.Stroke;
+}

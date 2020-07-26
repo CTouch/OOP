@@ -60,6 +60,9 @@ public:
     QSlider *scale_y;
     QLabel *value_scale_y;
     QRadioButton *scale_lock;
+    QHBoxLayout *horizontalLayout_8;
+    QPushButton *buttonShowCurrentlayerHist;
+    QPushButton *buttonShowDraingBoardHist;
     DrawingBoard *drawingboard;
     QMenuBar *menubar;
     QMenu *edit;
@@ -69,7 +72,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1032, 678);
+        MainWindow->resize(1118, 711);
         actionEllipse = new QAction(MainWindow);
         actionEllipse->setObjectName(QString::fromUtf8("actionEllipse"));
         actionCursor = new QAction(MainWindow);
@@ -80,7 +83,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         layoutWidget = new QWidget(centralwidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(0, 0, 431, 261));
+        layoutWidget->setGeometry(QRect(10, 10, 508, 371));
         verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -203,13 +206,28 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_6);
 
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
+        buttonShowCurrentlayerHist = new QPushButton(layoutWidget);
+        buttonShowCurrentlayerHist->setObjectName(QString::fromUtf8("buttonShowCurrentlayerHist"));
+
+        horizontalLayout_8->addWidget(buttonShowCurrentlayerHist);
+
+        buttonShowDraingBoardHist = new QPushButton(layoutWidget);
+        buttonShowDraingBoardHist->setObjectName(QString::fromUtf8("buttonShowDraingBoardHist"));
+
+        horizontalLayout_8->addWidget(buttonShowDraingBoardHist);
+
+
+        verticalLayout->addLayout(horizontalLayout_8);
+
         drawingboard = new DrawingBoard(centralwidget);
         drawingboard->setObjectName(QString::fromUtf8("drawingboard"));
-        drawingboard->setGeometry(QRect(440, 0, 581, 631));
+        drawingboard->setGeometry(QRect(530, 10, 581, 631));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1032, 22));
+        menubar->setGeometry(QRect(0, 0, 1118, 26));
         edit = new QMenu(menubar);
         edit->setObjectName(QString::fromUtf8("edit"));
         MainWindow->setMenuBar(menubar);
@@ -245,6 +263,8 @@ public:
         label_4->setText(QCoreApplication::translate("MainWindow", "scale_y", nullptr));
         value_scale_y->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         scale_lock->setText(QCoreApplication::translate("MainWindow", "Lock", nullptr));
+        buttonShowCurrentlayerHist->setText(QCoreApplication::translate("MainWindow", "Show Current Layer Histogram", nullptr));
+        buttonShowDraingBoardHist->setText(QCoreApplication::translate("MainWindow", "Show Drawing Board Histogram", nullptr));
         edit->setTitle(QCoreApplication::translate("MainWindow", "edit", nullptr));
     } // retranslateUi
 

@@ -26,7 +26,6 @@ before_build:
 
 build_script:
   - call "%vcvars%"
-  - cd code\src
   - qmake
   - mingw32-make
 
@@ -39,7 +38,7 @@ after_build:
   - tree
 
 artifacts:
-  - path: code/src/release
+  - path: release
     name: $(releaseName)
 
 deploy:

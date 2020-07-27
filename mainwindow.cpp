@@ -59,7 +59,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
-    ui->drawingboard->update();
+//    ui->drawingboard->update();
 }
 
 void MainWindow::menu_edit_triggered(QAction *action)
@@ -306,7 +306,6 @@ void MainWindow::readFile(QFile &file)
     }
 
     updateStatus();
-//    update();               //add by Touch20200717
 }
 
 void MainWindow::newFile()
@@ -316,6 +315,9 @@ void MainWindow::newFile()
         ui->drawingboard->selectedIndex = 0;
         deleteGraph();
     }
+    //第一次修改未完成，不存在未保存的修改
+    ui->drawingboard->doneFirstPaintevent = false;
+    ui->drawingboard->UnsavedChange = false;
 }
 
 void MainWindow::changeIndex(QAction *action)
@@ -347,58 +349,57 @@ void MainWindow::action_file(QAction *action)
 {
     if (action->text() == "New")
     {
-        newFile();
-        updateStatus();
+        //如果存在未保存的修改
+        if(ui->drawingboard->UnsavedChange)
+        {
+            //弹出窗口
+            DialogChecktoSave *dialog = new DialogChecktoSave(this);
+            dialog->setAttribute(Qt::WA_DeleteOnClose,true);        //关闭时delete
+            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::SaveChangeAndNew);
+            connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,&MainWindow::NottoSaveChangeAndNew);
+            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::CancelDialogChecktoSave);
+            dialog->exec();
+        }
+        else
+        {
+            newFile();
+            updateStatus();
+        }
     }
     if (action->text() == "Open")
     {
-        QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
-        fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
-        fileDialog->setViewMode(QFileDialog::Detail);
-
-        QList<QUrl> urls;
-
-        fileDialog->setSidebarUrls(urls);
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Read Files"),
-                                                        "",
-                                                        tr("*.oop") // 后缀必须为oop
-                                                        );
-        if (!fileName.isEmpty())
-        { // 文件有效
-            QFile file(fileName);
-            file.open(QIODevice::ReadOnly); // 只读文件
-            readFile(file); // 读取文件
+        //如果存在未保存的修改
+        if(ui->drawingboard->UnsavedChange)
+        {
+            //弹出窗口
+            DialogChecktoSave *dialog = new DialogChecktoSave(this);
+            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::SaveChangeAndOpen);
+            connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,&MainWindow::NottoSaveChangeAndOpen);
+            connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,&MainWindow::CancelDialogChecktoSave);
+            dialog->exec();
+        }
+        else
+        {
+            ActionRead();
         }
     }
     if (action->text() == "Save")
     {
-        QFileDialog *fileDialog = new QFileDialog(this);
-        fileDialog->setFileMode(QFileDialog::AnyFile); // 选择任意的文件，存在或自定义
-        fileDialog->setViewMode(QFileDialog::Detail);
-
-        QList<QUrl> urls;
-
-        fileDialog->setSidebarUrls(urls);
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Save Files"),
-                                                        "",
-                                                        tr("*.oop")
-                                                        );
-        if (!fileName.isEmpty())
+        if(ActionSave())
         {
-            QFile file(fileName);
-            file.open(QIODevice::WriteOnly); // 只写
-            saveFile(file);
+            ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
+            ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
         }
     }
     if (action->text() == "Import Image")
     {
-        QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
-        fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
-        fileDialog->setViewMode(QFileDialog::Detail);
+//        QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
+//        fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
+//        fileDialog->setViewMode(QFileDialog::Detail);
 
-        QList<QUrl> urls;
+//        QList<QUrl> urls;
 
-        fileDialog->setSidebarUrls(urls);
+//        fileDialog->setSidebarUrls(urls);
         QString fileName = QFileDialog::getOpenFileName(this, tr("Read Files"),
                                                         "",
                                                         tr("*.png") // 后缀必须为.png
@@ -416,13 +417,13 @@ void MainWindow::action_file(QAction *action)
     }
     if(action->text() == "Export Image")
     {
-        QFileDialog *fileDialog = new QFileDialog(this);
-        fileDialog->setFileMode(QFileDialog::AnyFile); // 选择任意的文件，存在或自定义
-        fileDialog->setViewMode(QFileDialog::Detail);
+//        QFileDialog *fileDialog = new QFileDialog(this);
+//        fileDialog->setFileMode(QFileDialog::AnyFile); // 选择任意的文件，存在或自定义
+//        fileDialog->setViewMode(QFileDialog::Detail);
 
-        QList<QUrl> urls;
+//        QList<QUrl> urls;
 
-        fileDialog->setSidebarUrls(urls);
+//        fileDialog->setSidebarUrls(urls);
         QString fileName = QFileDialog::getSaveFileName(this, tr("Save Files"),
                                                         "",
                                                         tr("*.png")
@@ -612,6 +613,7 @@ void MainWindow::recoverColor_stroke()
 void MainWindow::ShowImageHist(const QString & name,const myImage & image)
 {
     HistWidget *histwidget = new HistWidget(image);
+    histwidget->setAttribute(Qt::WA_DeleteOnClose,true);    //关闭时delete
     histwidget->setWindowTitle(name);
     histwidget->show();
     histwidget->ShowAllHist();
@@ -620,10 +622,11 @@ void MainWindow::ShowImageHist(const QString & name,const myImage & image)
 void MainWindow::ShowDrawingBoardHist()
 {
     myImage tp(this->ui->drawingboard->width(),this->ui->drawingboard->height());   //设置画布大小为drawingborad大小
-    QPainter painter(&(tp.img));                //构建画笔
-    this->ui->drawingboard->drawAll(painter,true);   //将所有图层绘制在画布上
+    QPainter painter(&(tp.img));                    //构建画笔
+    this->ui->drawingboard->drawAll(painter,true);  //将所有图层绘制在画布上
 
     HistWidget *histwidget = new HistWidget(tp);    //new直方图展示窗口
+    histwidget->setAttribute(Qt::WA_DeleteOnClose,true);    //关闭时delete
     histwidget->setWindowTitle("Drawing Board");    //设置标题
     histwidget->show();                             //打开直方图展示窗口
     histwidget->ShowAllHist();                      //展示drawingborad的直方图
@@ -633,7 +636,9 @@ void MainWindow::ShowCurrentLayerHist()
 {
     if (!(ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size()))    //如果未选择
     {
-
+        //弹出对话窗口提示并未选择任何图层
+        DialogNoSelected *dialog = new DialogNoSelected(this);
+        dialog->show();
         return;
     }
     int currentIndex = this->ui->drawingboard->selectedIndex;
@@ -644,6 +649,7 @@ void MainWindow::ShowCurrentLayerHist()
     this->ui->drawingboard->AllGraphs[currentIndex]->draw(painter);                 //将当前图层绘制在画布上
 
     HistWidget *histwidget = new HistWidget(tp);    //new直方图展示窗口
+    histwidget->setAttribute(Qt::WA_DeleteOnClose,true);    //关闭时delete
     histwidget->setWindowTitle("Layer " + QString::number(currentIndex));           //设置标题
     histwidget->show();                             //打开直方图展示窗口
     histwidget->ShowAllHist();                      //展示当前图层的直方图
@@ -657,3 +663,90 @@ void MainWindow::ExportImageFile(const QString & FileName)
 //    FileName.
     tp.img.save(FileName);
 }
+
+bool MainWindow::ActionSave()
+{
+//    QFileDialog *fileDialog = new QFileDialog(this);
+//    fileDialog->setFileMode(QFileDialog::AnyFile); // 选择任意的文件，存在或自定义
+//    fileDialog->setViewMode(QFileDialog::Detail);
+
+//    QList<QUrl> urls;
+
+//    fileDialog->setSidebarUrls(urls);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Files"),
+                                                    "",
+                                                    tr("*.oop")
+                                                    );
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly); // 只写
+        saveFile(file);
+        ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
+        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
+        return true;
+    }
+    return false;
+}
+
+void MainWindow::ActionRead()
+{
+//    QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
+//    fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
+//    fileDialog->setViewMode(QFileDialog::Detail);
+
+//    QList<QUrl> urls;
+
+//    fileDialog->setSidebarUrls(urls);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Read Files"),
+                                                    "",
+                                                    tr("*.oop") // 后缀必须为oop
+                                                    );
+    if (!fileName.isEmpty())
+    { // 文件有效
+        QFile file(fileName);
+        file.open(QIODevice::ReadOnly); // 只读文件
+        readFile(file); // 读取文件
+        ui->drawingboard->doneFirstPaintevent = false;        //读取后，将第一次paintevent视为未完成
+        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
+    }
+}
+
+
+void MainWindow::SaveChangeAndNew()
+{
+    if(ActionSave())        //如果成功保存
+    {
+        newFile();
+        updateStatus();
+    }
+    else return;
+}
+
+void MainWindow::NottoSaveChangeAndNew()
+{
+    newFile();
+    updateStatus();
+}
+
+void MainWindow::SaveChangeAndOpen()
+{
+    if(ActionSave())
+    {
+        ActionRead();
+        updateStatus();
+    }
+    else return;
+}
+
+void MainWindow::NottoSaveChangeAndOpen()
+{
+    ActionRead();
+    updateStatus();
+}
+
+void MainWindow::CancelDialogChecktoSave()
+{
+    return;
+}
+

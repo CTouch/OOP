@@ -6,6 +6,10 @@
 #include <QDebug>
 
 
+#ifdef DRAWINGBOARD_DEBUG_ON
+int count_paint_event = 0;
+#endif
+
 DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent),
     selectedIndex(-1)
 {
@@ -15,10 +19,10 @@ DrawingBoard::DrawingBoard(QWidget *parent) : QWidget(parent),
 void DrawingBoard::mouseMoveEvent(QMouseEvent *event)
 {
     current_mouse = event->pos();
-    update();
+
     if (isClicking)
     { // 移动鼠标时重绘图形
-
+        update();
     }
     else
     {
@@ -73,6 +77,7 @@ void DrawingBoard::mousePressEvent(QMouseEvent *event)
             }
         }
     }
+    //向主窗口发送需要更新的信号
     emit ChangedSignal();
     isClicking = true;
 }
@@ -112,6 +117,18 @@ void DrawingBoard::keyReleaseEvent(QKeyEvent *event)
 
 void DrawingBoard::paintEvent(QPaintEvent *)
 {
+    #ifdef DRAWINGBOARD_DEBUG_ON
+        std::cout << "DrawingBoard PaintEvent Count: " << count_paint_event << std::endl;
+        count_paint_event++;
+    #endif
+    if(doneFirstPaintevent)    //如果此前已经完成第一次paintevent，说明存在未保存的修改
+    {
+        UnsavedChange = true;
+    }
+    else
+    {
+        doneFirstPaintevent = true;
+    }
     QPainter painter(this); // 构建画笔
     QBrush tpbrush(Qt::white);
     painter.fillRect(0,0,this->width(),this->height(),tpbrush);//绘制白色背景

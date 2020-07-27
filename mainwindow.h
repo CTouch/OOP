@@ -30,6 +30,8 @@
 #include "myrectangle.h"
 #include "histwidget.h"
 #include "drawingboard.h"
+#include "dialognoselected.h"
+#include "dialogchecktosave.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -86,7 +88,13 @@ private:
     void init(); // 初始化界面
     void deleteGraph(); // 删除选中的图层
     void saveFile(QFile &file); // 写文件
+
+    //保存为.oop的入口，true为保存，false为未保存
+    bool ActionSave();
     void readFile(QFile &file); // 读文件
+
+    //读取.oop的入口
+    void ActionRead();
     void newFile(); // 新建文件，即清空
 
     //导出为图像文件
@@ -112,10 +120,28 @@ private slots: // 槽函数，当某个信号被触发后会被调用
 
     //show the histogram in a new widget
     void ShowImageHist(const QString & name, const myImage &image);
+
     //show the histogram of the drawing board (at current time)
     void ShowDrawingBoardHist();
+
     //展示当前图层的直方图
     void ShowCurrentLayerHist();
+
+    //保存修改并创建新文件
+    void SaveChangeAndNew();
+
+    //不保存修改并创建新文件
+    void NottoSaveChangeAndNew();
+
+    //cancel
+    void CancelDialogChecktoSave();
+
+    //保存修改并打开oop文件
+    void SaveChangeAndOpen();
+
+    //不保存修改并创建新文件
+    void NottoSaveChangeAndOpen();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -47,6 +47,7 @@ public:
     virtual void read(QDataStream &in) override; // 文件的读
     virtual void write(QDataStream &out) override; // 文件的写
 
+    bool operator ==(const myImage & a);
 public:
     QImage img;     //图像信息
 

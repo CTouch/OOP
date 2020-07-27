@@ -6,6 +6,8 @@
 
 #include "graph.h"
 
+//#define DRAWINGBOARD_DEBUG_ON 1
+
 enum SelectType
 { // 当前的操作模式
     CURSOR,
@@ -28,6 +30,9 @@ private:
     QColor lastColor; // 选择色板前的颜色
 
 public:
+    bool UnsavedChange = false;          //是否有未保存的修改
+    bool doneFirstPaintevent = false;    //第一次绘制是否已经完成
+
     int selectedIndex = -1; // 当前选中的图层
 
     // 储存所有图形的链表
@@ -59,12 +64,6 @@ protected:
     // 监测整个图像的绘制（通过update()函数激活)
     void paintEvent(QPaintEvent *) override;
 
-private:
-//    void setupMenu(); // 初始化菜单栏
-//    void init(); // 初始化界面
-//    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
-//    void newFile(); // 新建文件，即清空
-
 public:
     void drawAll(QPainter &painter,bool no_border = false); // 按图层顺序重新绘制链表中所有图形,maybe_border决定是否可能绘制graph的border，默认为true
     bool deleteGraph(); // 删除选中的图层
@@ -72,7 +71,6 @@ public:
     void readFile(QFile &file); // 读文件
 
 signals:
-
     //如果drawingboard上发生修改，则向主窗口发送signal，进行updatestatus()
     void ChangedSignal();
 

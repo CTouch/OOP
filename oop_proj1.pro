@@ -18,6 +18,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 QT += charts
 
 SOURCES += \
+    dialogchecktosave.cpp \
+    dialognoselected.cpp \
     drawingboard.cpp \
     histwidget.cpp \
     main.cpp \
@@ -28,6 +30,8 @@ SOURCES += \
     myrectangle.cpp
 
 HEADERS += \
+    dialogchecktosave.h \
+    dialognoselected.h \
     drawingboard.h \
     graph.h \
     histwidget.h \
@@ -37,7 +41,11 @@ HEADERS += \
     mypolygon.h \
     myrectangle.h
 
+#CONFIG += console thread
+
 FORMS += \
+    dialogchecktosave.ui \
+    dialognoselected.ui \
     histwidget.ui \
     mainwindow.ui
 

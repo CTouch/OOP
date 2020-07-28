@@ -121,14 +121,7 @@ void DrawingBoard::paintEvent(QPaintEvent *)
         std::cout << "DrawingBoard PaintEvent Count: " << count_paint_event << std::endl;
         count_paint_event++;
     #endif
-    if(doneFirstPaintevent)    //如果此前已经完成第一次paintevent，说明存在未保存的修改
-    {
-        UnsavedChange = true;
-    }
-    else
-    {
-        doneFirstPaintevent = true;
-    }
+
     QPainter painter(this); // 构建画笔
     QBrush tpbrush(Qt::white);
     painter.fillRect(0,0,this->width(),this->height(),tpbrush);//绘制白色背景
@@ -249,6 +242,8 @@ bool DrawingBoard::deleteGraph()
 
 void DrawingBoard::saveFile(QFile &file)
 {
+    FilePath = file.fileName();
+
     QDataStream out(&file);
 
     // 先储存mainwindow中的数据
@@ -266,6 +261,7 @@ void DrawingBoard::saveFile(QFile &file)
 
 void DrawingBoard::readFile(QFile &file)
 {
+    FilePath = file.fileName();
     QDataStream in(&file);
     in >> (onShift) >> current_mouse >> isClicking >> selectedIndex;
     int size = 0;
@@ -303,3 +299,34 @@ void DrawingBoard::readFile(QFile &file)
     update();
 }
 
+bool DrawingBoard::CheckEqual(const QList<Graph*> & GraphList)
+{
+    if(AllGraphs.size() != GraphList.size()) return false;      //图层数量不同则不相同
+    for(int i = 0;i < AllGraphs.size();i++)                     //顺序检查每个图层是否不同
+    {
+        if(AllGraphs[i]->base_equal(*GraphList[i]))
+        {
+            if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myEllipse*>(AllGraphs[i]) == *dynamic_cast<myEllipse*>(GraphList[i]))) return false;
+            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myRectangle*>(AllGraphs[i]) == *dynamic_cast<myRectangle*>(GraphList[i]))) return false;
+            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myImage*>(AllGraphs[i]) == *dynamic_cast<myImage*>(GraphList[i]))) return false;
+            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myPolygon*>(AllGraphs[i]) == *dynamic_cast<myPolygon*>(GraphList[i]))) return false;
+        }
+    }
+    return true;
+}
+bool DrawingBoard::UnsavedChange()
+{
+    if(FilePath.length() > 0)               //读取自文件
+    {
+        DrawingBoard tp;                    //临时变量
+        QFile file(FilePath);               //读取文件
+        file.open(QIODevice::ReadOnly);
+        tp.readFile(file);
+        return (!CheckEqual(tp.AllGraphs)); //检测是否存在不同
+    }
+    else            //不是读取自文件
+    {
+        if(AllGraphs.size() > 0) return true;   //存在图层则存在未保存的修改
+        else return false;
+    }
+}

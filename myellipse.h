@@ -24,6 +24,7 @@ public: // 基类纯虚函数的继承
     QBrush getBrush() override;
     QPen getStroke() override;
     bool operator == (const myEllipse& ellipse) const;
+//    bool operator == (const Graph& graph) const;
 
 private: // 私有成员
     QBrush Fill; // 填充笔刷

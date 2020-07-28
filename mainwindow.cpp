@@ -296,7 +296,6 @@ void MainWindow::saveFile(QFile &file)
 void MainWindow::readFile(QFile &file)
 {
     ui->drawingboard->readFile(file);
-
     menu_layer->clear();
     ui->index_list->clear();
     for (int i = 0;i < ui->drawingboard->AllGraphs.size(); ++i)
@@ -310,14 +309,12 @@ void MainWindow::readFile(QFile &file)
 
 void MainWindow::newFile()
 {
+    ui->drawingboard->FilePath = "";
     while (!(ui->drawingboard->AllGraphs.empty()))
     {
         ui->drawingboard->selectedIndex = 0;
         deleteGraph();
     }
-    //第一次修改未完成，不存在未保存的修改
-    ui->drawingboard->doneFirstPaintevent = false;
-    ui->drawingboard->UnsavedChange = false;
 }
 
 void MainWindow::changeIndex(QAction *action)
@@ -350,7 +347,7 @@ void MainWindow::action_file(QAction *action)
     if (action->text() == "New")
     {
         //如果存在未保存的修改
-        if(ui->drawingboard->UnsavedChange)
+        if(ui->drawingboard->UnsavedChange())
         {
             //弹出窗口
             DialogChecktoSave *dialog = new DialogChecktoSave(this);
@@ -369,7 +366,7 @@ void MainWindow::action_file(QAction *action)
     if (action->text() == "Open")
     {
         //如果存在未保存的修改
-        if(ui->drawingboard->UnsavedChange)
+        if(ui->drawingboard->UnsavedChange())
         {
             //弹出窗口
             DialogChecktoSave *dialog = new DialogChecktoSave(this);
@@ -385,11 +382,7 @@ void MainWindow::action_file(QAction *action)
     }
     if (action->text() == "Save")
     {
-        if(ActionSave())
-        {
-            ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
-            ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
-        }
+        ActionSave();
     }
     if (action->text() == "Import Image")
     {
@@ -666,6 +659,13 @@ void MainWindow::ExportImageFile(const QString & FileName)
 
 bool MainWindow::ActionSave()
 {
+    if(ui->drawingboard->FilePath.length() > 0) //存在文件
+    {
+        QFile file(ui->drawingboard->FilePath);
+        file.open(QIODevice::WriteOnly);
+        saveFile(file);
+        return true;
+    }
 //    QFileDialog *fileDialog = new QFileDialog(this);
 //    fileDialog->setFileMode(QFileDialog::AnyFile); // 选择任意的文件，存在或自定义
 //    fileDialog->setViewMode(QFileDialog::Detail);
@@ -682,8 +682,6 @@ bool MainWindow::ActionSave()
         QFile file(fileName);
         file.open(QIODevice::WriteOnly); // 只写
         saveFile(file);
-        ui->drawingboard->doneFirstPaintevent = false;        //保存后，将第一次paintevent视为未完成
-        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
         return true;
     }
     return false;
@@ -707,8 +705,6 @@ void MainWindow::ActionRead()
         QFile file(fileName);
         file.open(QIODevice::ReadOnly); // 只读文件
         readFile(file); // 读取文件
-        ui->drawingboard->doneFirstPaintevent = false;        //读取后，将第一次paintevent视为未完成
-        ui->drawingboard->UnsavedChange = false;              //不存在未保存的修改
     }
 }
 

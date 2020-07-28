@@ -104,11 +104,13 @@ public: // 所有以Graph为基类的图形有相同实现方式的方法
     inline bool contain(QPoint &pos); // 判断（鼠标点击位置）是否在矩形框内部
     inline void changeIndex(int index); // 更换图层
     inline void crop(); // 裁剪（本质上是调整边框，把边框作为遮罩）
+    inline bool base_equal(const Graph& graph); // 判断基类包含属性是否相同，用于简化bool operator==
+
+//    virtual bool operator == (const Graph & graph) const = 0 ;
 
 protected:
     inline void updateBorder(); // 根据裁切比例确定边框
     inline void updateCropRatios(); // 根据边框确定裁切比例
-    inline bool base_equal(const Graph& graph); // 判断基类包含属性是否相同，用于简化bool operator==
 };
 
 
@@ -337,4 +339,14 @@ inline bool Graph::base_equal(const Graph &graph)
                                         && qFuzzyCompare(crop_ratios[3], graph.crop_ratios[13]));
 }
 
+//inline bool Graph::operator == (const Graph & graph)
+//{
+//    if(base_equal(graph))
+//    {
+//        if(shape == Shape::SHAPE_ELLIPSE)
+//        {
+//            return dynamic_cast<myEllipse*>()
+//        }
+//    }
+//}
 #endif // GRAPH_H

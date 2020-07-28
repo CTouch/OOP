@@ -142,3 +142,4 @@ bool myEllipse::operator ==(const myEllipse &ellipse) const
 {
     return Fill == ellipse.Fill && Stroke == ellipse.Stroke;
 }
+

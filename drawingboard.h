@@ -30,9 +30,7 @@ private:
     QColor lastColor; // 选择色板前的颜色
 
 public:
-    bool UnsavedChange = false;          //是否有未保存的修改
-    bool doneFirstPaintevent = false;    //第一次绘制是否已经完成
-
+    QString FilePath;           //文件路径，若不是从文件打开且未保存过则为空
     int selectedIndex = -1; // 当前选中的图层
 
     // 储存所有图形的链表
@@ -69,6 +67,8 @@ public:
     bool deleteGraph(); // 删除选中的图层
     void saveFile(QFile &file); // 写文件
     void readFile(QFile &file); // 读文件
+    bool CheckEqual(const QList<Graph*> & GraphList);       //检测两个lsit是否相同，true为相同
+    bool UnsavedChange();          //是否有未保存的修改,true为存在
 
 signals:
     //如果drawingboard上发生修改，则向主窗口发送signal，进行updatestatus()

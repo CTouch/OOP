@@ -306,10 +306,10 @@ bool DrawingBoard::CheckEqual(const QList<Graph*> & GraphList)
     {
         if(AllGraphs[i]->base_equal(*GraphList[i]))
         {
-            if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myEllipse*>(AllGraphs[i]) == *dynamic_cast<myEllipse*>(GraphList[i]))) return false;
-            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myRectangle*>(AllGraphs[i]) == *dynamic_cast<myRectangle*>(GraphList[i]))) return false;
-            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myImage*>(AllGraphs[i]) == *dynamic_cast<myImage*>(GraphList[i]))) return false;
-            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myPolygon*>(AllGraphs[i]) == *dynamic_cast<myPolygon*>(GraphList[i]))) return false;
+            if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myEllipse*>(AllGraphs[i]) == *dynamic_cast<myEllipse*>(GraphList[i]))) return false;              //椭圆形
+            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myRectangle*>(AllGraphs[i]) == *dynamic_cast<myRectangle*>(GraphList[i]))) return false;     //矩形
+            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myImage*>(AllGraphs[i]) == *dynamic_cast<myImage*>(GraphList[i]))) return false;             //导入图像类型
+            else if(AllGraphs[i]->shape == Shape::SHAPE_ELLIPSE && !(*dynamic_cast<myPolygon*>(AllGraphs[i]) == *dynamic_cast<myPolygon*>(GraphList[i]))) return false;         //多边形
         }
     }
     return true;

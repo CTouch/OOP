@@ -44,34 +44,112 @@ public:
 
 
 protected:
-    // 监测鼠标移动
+    //      功能描述；重载鼠标移动事件，用于图像绘制和编辑
+    //      参数描述：event为事件信息
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    // 监测鼠标左键单击
+    //      功能描述；重载鼠标单击事件，用于更新编辑状态和图像绘制
+    //      参数描述：event为事件信息
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
     void mousePressEvent(QMouseEvent *event) override;
 
-    // 监测鼠标左键释放
+    //      功能描述；重载鼠标释放事件，用于更新编辑状态和图像绘制
+    //      参数描述：event为事件信息
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-    // 监测键盘按下
+    //      功能描述；重载按下键盘事件，检测shift键状态
+    //      参数描述：event为事件信息
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
     void keyPressEvent(QKeyEvent *event) override;
 
-    // 监测键盘松开
+    //      功能描述；重载释放键盘事件，检测shift键状态
+    //      参数描述：event为事件信息
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
     void keyReleaseEvent(QKeyEvent *event) override;
 
-    // 监测整个图像的绘制（通过update()函数激活)
+    //      功能描述；重载paintEvent，按照自定义方式绘制Drawing Board
+    //      参数描述：
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：按照图层从小到大的方式绘制，体现图层的相互遮挡关系
     void paintEvent(QPaintEvent *) override;
 
 public:
-    void drawAll(QPainter &painter,bool no_border = false); // 按图层顺序重新绘制链表中所有图形,maybe_border决定是否可能绘制graph的border，默认为true
-    bool deleteGraph(); // 删除选中的图层
-    void saveFile(QFile &file); // 写文件
-    void readFile(QFile &file); // 读文件
-    bool CheckEqual(const QList<Graph*> & GraphList);       //检测两个lsit是否相同，true为相同
-    bool UnsavedChange();          //是否有未保存的修改,true为存在
+
+    //      功能描述；绘制Drawing Board所有图层信息
+    //      参数描述：painter为设置好QPaintDevice的画笔，no_border若为true则不绘制选中边框，默认为false
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：按照图层从小到大的方式绘制，体现图层的相互遮挡关系
+    void drawAll(QPainter &painter,bool no_border = false);
+
+    //      功能描述；删除选中图层，并选中相邻图层
+    //      参数描述：
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
+    bool deleteGraph();
+
+    //      功能描述；保存信息
+    //      参数描述：file为保存信息的位置
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
+    void saveFile(QFile &file);
+
+    //      功能描述；读取信息
+    //      参数描述：file为读取信息的位置
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
+    void readFile(QFile &file);
+
+    //      功能描述；检查AllGraph中的图层信息和GraphList中的图层信息是否一致
+    //      参数描述：GraphList为代比较的Graph类指针列表
+    //      返回值描述：true为一致，false为不一致
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
+    bool CheckEqual(const QList<Graph*> & GraphList);
+
+    //      功能描述；确认当前Drawing Board是否存在未保存的修改
+    //      参数描述：
+    //      返回值描述：true为存在，false为不存在
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：若当前Drawing Board打开自.oop文件，则读取文件调用CheckEqual进行比较；
+    //                  若为新建Drawing Board则由图层是否为零进行判断。
+    bool UnsavedChange();
 
 signals:
-    //如果drawingboard上发生修改，则向主窗口发送signal，进行updatestatus()
+    //      功能描述；发送当前画板被修改的信号，主窗口收到之后进行updateStatus(),更新状态
+    //      参数描述：
+    //      返回值描述：
+    //      重要局部变量定义：
+    //      重要局部变量用途描述：
+    //      函数算法描述：
     void ChangedSignal();
 
 };

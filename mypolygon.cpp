@@ -220,13 +220,15 @@ void myPolygon::setStroke(int width)
 
 void myPolygon::read(QDataStream &in)
 {
+    int type; // 枚举类型不推荐直接 >>
     hover_point = nullptr;
     in >> last_mouse >> current_mouse >> angle >> Index;
-    in >> editType >> Opacity >> isBorderVisible >> onShift;
+    in >> type >> Opacity >> isBorderVisible >> onShift;
     in >> scale_x >> scale_y >> Center >> graph_width >> graph_height;
     in >> Fill >> Stroke >> border_tl >> border_br;
     in >> point_list >> isClosed >> Stroke;
     in >> min_x >> max_x >> min_y >> max_y;
+    editType = EditType(type);
 }
 
 void myPolygon::write(QDataStream &out)

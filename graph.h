@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QPixmap>
 #include <array>
+#include <QDataStream>
 
 
 enum EditType
@@ -23,7 +24,6 @@ enum EditType
     CLOSING_POLYGON, // 特属于多边形的状态，按回车后封闭多边形
     HOVER_POLYGON, // 特属于多边形的状态，还在绘制但是鼠标处于放松的状态，会预览将要绘制的边
 };
-
 
 enum Shape
 { // 形状的颜色，用于规范储存、读取".oop"文件

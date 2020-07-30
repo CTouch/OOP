@@ -269,8 +269,9 @@ void DrawingBoard::readFile(QFile &file)
     AllGraphs.clear();
     for (int i = 0;i < size; ++i)
     {
-        Shape shape;
-        in >> shape;
+        int shape_int;
+        in >> shape_int;
+        Shape shape = Shape(shape_int);
         if (shape == Shape::SHAPE_ELLIPSE)
         {
             myEllipse *ellipse = new myEllipse(i);

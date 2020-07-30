@@ -98,13 +98,15 @@ Graph *myImage::duplicate()
 
 void myImage::read(QDataStream &in)
 {
+    int type; // 枚举类型不推荐直接 >>
     //按照输出格式读取信息
     in >> last_mouse >> current_mouse >> angle >> Index;
-    in >> editType >> Opacity >> isBorderVisible >> (onShift = false);
+    in >> type >> Opacity >> isBorderVisible >> (onShift = false);
     in >> scale_x >> scale_y >> Center >> graph_width >> graph_height;
     in >> border_tl >> border_br;
     //读取图像信息
     in >> img;
+    editType = EditType(type);
 }
 
 int myImage::GetMax(int a[],int len)

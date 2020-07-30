@@ -111,10 +111,12 @@ QBrush myRectangle::getBrush()
 
 void myRectangle::read(QDataStream &in)
 { // 以和write相同的格式读入输入流in
+    int type; // 枚举类型不推荐直接 >>
     in >> last_mouse >> current_mouse >> angle >> Index;
-    in >> editType >> Opacity >> isBorderVisible >> onShift;
+    in >> type >> Opacity >> isBorderVisible >> onShift;
     in >> scale_x >> scale_y >> Center >> graph_width >> graph_height;
     in >> Fill >> Stroke >> border_tl >> border_br;
+    editType = EditType(type);
 }
 
 

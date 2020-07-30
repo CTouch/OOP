@@ -8,6 +8,7 @@
 #include <QtMath>
 #include <QDebug>
 #include <QPixmap>
+#include <array>
 
 
 enum EditType
@@ -55,7 +56,7 @@ protected: // 只能由自己和子类访问的变量
     int graph_height; // 图形的高度
     QPoint border_tl; // 矩形辅助边框的左上角, top left, 未经过旋转和放缩
     QPoint border_br; // 矩形辅助边框的右下角, bottom right, 未经过旋转和放缩
-    qreal *crop_ratios; // 四个方向的裁切比例，-1～1，-1表示把另一半也切完了，1表示没有裁切
+    std::array<qreal, 4>crop_ratios; // 四个方向的裁切比例，-1～1，-1表示把另一半也切完了，1表示没有裁切
     // crop_ratios[0]: 上
     // crop_ratios[1]: 右
     // crop_ratios[2]: 下
@@ -76,9 +77,7 @@ public: // 基类的基础构造器
         scale_x(1.0),
         scale_y(1.0)
         {
-            crop_ratios = new qreal[4]();
-            for (int i = 0;i <= 3; ++i)
-                crop_ratios[i] = 1.0;
+            crop_ratios.fill(1.0);
         }
 
 public: // 必须由子类来实现的纯虚函数，外界通过这些函数与图形交互
@@ -364,11 +363,10 @@ inline bool Graph::base_equal(const Graph &graph)
            (graph_height == graph.graph_height) &&
            (border_tl == graph.border_tl) &&
            (border_br == graph.border_br) &&
-           (crop_ratios == nullptr) ? (graph.crop_ratios == nullptr) : (graph.crop_ratios != nullptr
-                                        && qFuzzyCompare(crop_ratios[0], graph.crop_ratios[0])
-                                        && qFuzzyCompare(crop_ratios[1], graph.crop_ratios[1])
-                                        && qFuzzyCompare(crop_ratios[2], graph.crop_ratios[2])
-                                        && qFuzzyCompare(crop_ratios[3], graph.crop_ratios[13]));
+           qFuzzyCompare(crop_ratios[0], graph.crop_ratios[0]) &&
+           qFuzzyCompare(crop_ratios[1], graph.crop_ratios[1]) &&
+           qFuzzyCompare(crop_ratios[2], graph.crop_ratios[2]) &&
+           qFuzzyCompare(crop_ratios[3], graph.crop_ratios[3]);
 }
 
 //inline bool Graph::operator == (const Graph & graph)

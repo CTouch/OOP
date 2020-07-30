@@ -2,6 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+TARGET = simple_ps
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -58,3 +59,5 @@ RESOURCES += \
     resource/resources.qrc
 
 RC_FILE += resource/icon.rc
+DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/)
+

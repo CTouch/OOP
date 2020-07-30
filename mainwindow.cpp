@@ -20,6 +20,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(ui->drawingboard->UnsavedChange())
     {
+        event->ignore();        //除了点击Save, Not to Save两个按钮之外的情况，均不关闭主窗口
         //弹出窗口
         DialogChecktoSave *dialog = new DialogChecktoSave(this);
         dialog->setAttribute(Qt::WA_DeleteOnClose,true);        //关闭时delete

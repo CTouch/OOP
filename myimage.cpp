@@ -25,7 +25,6 @@ myImage::myImage(int Index,const QString & FilePath):img(FilePath)
     border_tl = QPoint(0,0); // 矩形辅助边框的左上角, top left, 未经过旋转和放缩
     border_br = QPoint(graph_width,graph_height); // 矩形辅助边框的右下角, bottom right, 未经过旋转和放缩
 
-    std::cout << "begin show hist!\n";
     showHist();
 
 }

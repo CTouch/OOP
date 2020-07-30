@@ -4,9 +4,6 @@
 #include <QPainter>
 #include <QRgb>
 #include <QtCharts>
-#include <iostream>
-#include <vector>
-//#include <QCustomPlot>
 #include "graph.h"
 
 //the max value of r/g/b

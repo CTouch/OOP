@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPoint>
+#include <QLabel>
 //#include <algorithm>
 #include "myimage.h"
 

@@ -3,7 +3,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QRgb>
-#include <QtCharts>
+//#include <QtCharts>
 #include "graph.h"
 
 //the max value of r/g/b

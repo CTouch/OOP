@@ -15,6 +15,28 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(ui->drawingboard->UnsavedChange())
+    {
+        //弹出窗口
+        DialogChecktoSave *dialog = new DialogChecktoSave(this);
+        dialog->setAttribute(Qt::WA_DeleteOnClose,true);        //关闭时delete
+        connect(dialog,&DialogChecktoSave::signalButtonSaveClicked,this,[&](){          //点击save之后，保存并退出
+            ActionSave();
+            event->accept();
+        });
+        connect(dialog,&DialogChecktoSave::signalButtonNottoSaveClicked,this,[&](){     //点击not to save之后，不保存并退出
+            event->accept();
+        });
+        connect(dialog,&DialogChecktoSave::signalButtonCancelClicked,this,[&](){        //点击cancel之后不关闭主窗口
+            event->ignore();
+        });
+        dialog->exec();
+    }
+    else event->accept();
+}
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     updateStatus();

@@ -60,6 +60,9 @@ protected:
     // 检测窗口大小变换
     void resizeEvent(QResizeEvent *event) override;
 
+    //监测关闭窗口事件
+    void closeEvent(QCloseEvent *event) override;
+
     // 监测键盘按下
     void keyPressEvent(QKeyEvent *event) override;
 

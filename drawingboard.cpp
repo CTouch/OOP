@@ -265,7 +265,9 @@ void DrawingBoard::readFile(QFile &file)
     QDataStream in(&file);
     in >> (onShift) >> current_mouse >> isClicking >> selectedIndex;
     int size = 0;
-    in >> selectType >> size;
+    int type;
+    in >> type >> size;
+    selectType = SelectType(type);
     AllGraphs.clear();
     for (int i = 0;i < size; ++i)
     {

@@ -17,20 +17,12 @@ public:
 
 public:
     Ui::DialogChecktoSave *ui;
-
-private slots:
-    //按下Save
-    void slotButtonSaveClicked();
-    //按下Not to Save
-    void slotButtonNottoSaveClicked();
-    //按下Cancel
-    void slotButtonCancelClicked();
 signals:
-    //按下Save
+    // 按下Save
     void signalButtonSaveClicked();
-    //按下Not to Save
+    // 按下Not to Save
     void signalButtonNottoSaveClicked();
-    //按下Cancel
+    // 按下Cancel
     void signalButtonCancelClicked();
 };
 

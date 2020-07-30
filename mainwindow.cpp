@@ -189,8 +189,9 @@ void MainWindow::setupMenu()
     new_file->setShortcut(QKeySequence::New); // windows: control+N, mac: command+N
     open_file->setShortcut(QKeySequence::Open); // windwos: control+O, mac: command+O
     save_file->setShortcut(QKeySequence::Save); // windwos: control+S, mac: command+s
-    import_image->setShortcut(QKeySequence(tr("Ctrl+I"))); // control + i
-    Duplicate->setShortcut(QKeySequence::Copy); // windwos: control+C, mac: command+c
+    import_image->setShortcut(QKeySequence(tr("Ctrl+I"))); // windwos: control+I, mac: command+I
+    export_image->setShortcut(QKeySequence(tr("Ctrl+M"))); // windwos: control+M, mac: command+M
+    Duplicate->setShortcut(QKeySequence(tr("Ctrl+D"))); // windwos: control+D, mac: command+D
 
 
     // 把菜单栏的内容添加到菜单栏中
@@ -386,13 +387,13 @@ void MainWindow::action_file(QAction *action)
     }
     if (action->text() == "Import Image")
     {
-//        QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
-//        fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
-//        fileDialog->setViewMode(QFileDialog::Detail);
+        QFileDialog *fileDialog = new QFileDialog(this); // 弹出窗口，用户选择文件
+        fileDialog->setFileMode(QFileDialog::ExistingFile); // 只能选择已经存在的文件
+        fileDialog->setViewMode(QFileDialog::Detail);
 
-//        QList<QUrl> urls;
+        QList<QUrl> urls;
 
-//        fileDialog->setSidebarUrls(urls);
+        fileDialog->setSidebarUrls(urls);
         QString fileName = QFileDialog::getOpenFileName(this, tr("Read Files"),
                                                         "",
                                                         tr("*.png") // 后缀必须为.png
@@ -452,10 +453,22 @@ void MainWindow::on_button_fill_color_clicked()
         color->show(); // 显示取色器
 
         // 选择的颜色发生更换，实时预览
-        connect(color, SIGNAL(currentColorChanged(QColor)), this, SLOT(setColor_fill(QColor)));
+        connect(color, &QColorDialog::currentColorChanged, this, [&](QColor color){
+            if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
+            {
+                ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setFill(color);
+                ui->drawingboard->update();
+            }
+        });
 
         // 取消选色，颜色返回原来的值
-        connect(color, SIGNAL(rejected()), this, SLOT(recoverColor_fill()));
+        connect(color, &QColorDialog::rejected, this, [&](){
+            if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
+            {
+                ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setFill(lastColor);
+                ui->drawingboard->update();
+            }
+        });
 
         // 重新绘制图形
         ui->drawingboard->update();
@@ -477,10 +490,22 @@ void MainWindow::on_button_stroke_color_clicked()
 
 
         // 选择颜色，但没确定
-        connect(color, SIGNAL(currentColorChanged(QColor)), this, SLOT(setColor_stroke(QColor)));
+        connect(color, &QColorDialog::currentColorChanged, this, [&](QColor color){
+            if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
+            {
+                ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setStroke(color);
+                ui->drawingboard->update();
+            }
+        });
 
         // 取消选色，颜色返回原来的值
-        connect(color, SIGNAL(rejected()), this, SLOT(recoverColor_stroke()));
+        connect(color, &QColorDialog::rejected, this, [&](){
+            if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
+            {
+                ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setStroke(lastColor);
+                ui->drawingboard->update();
+            }
+        });
 
         ui->drawingboard->update();
     }
@@ -566,42 +591,6 @@ void MainWindow::on_scale_lock_clicked()
     }
 }
 
-void MainWindow::setColor_fill(QColor color)
-{
-    if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
-    {
-        ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setFill(color);
-        ui->drawingboard->update();
-    }
-}
-
-void MainWindow::recoverColor_fill()
-{
-    if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
-    {
-        ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setFill(lastColor);
-        ui->drawingboard->update();
-    }
-}
-
-
-void MainWindow::setColor_stroke(QColor color)
-{
-    if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
-    {
-        ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setStroke(color);
-        ui->drawingboard->update();
-    }
-}
-
-void MainWindow::recoverColor_stroke()
-{
-    if (ui->drawingboard->selectedIndex >= 0 && ui->drawingboard->selectedIndex < ui->drawingboard->AllGraphs.size())
-    {
-        ui->drawingboard->AllGraphs[ui->drawingboard->selectedIndex]->setStroke(lastColor);
-        ui->drawingboard->update();
-    }
-}
 
 void MainWindow::ShowImageHist(const QString & name,const myImage & image)
 {

@@ -82,34 +82,66 @@ public: // 基类的基础构造器
         }
 
 public: // 必须由子类来实现的纯虚函数，外界通过这些函数与图形交互
+
+    //      功能描述；绘制图形/图像
+    //      参数描述：用于绘制的画笔painter
     virtual void draw(QPainter &painter) = 0; // 绘制
+    //      功能描述；复制图形/图像
+    //      返回值描述：复制生成的图形/图像
     virtual Graph *duplicate() = 0; // 复制
+    //      功能描述；将数据流中的数据输入至图形/图像中
+    //      参数描述：输入流in
     virtual void read(QDataStream &in) = 0; // 文件的读
+    //      功能描述；将图形/图像中的数据输入至数据流中
+    //      参数描述：输出流out
     virtual void write(QDataStream &out) = 0; // 文件的写
 
 public: // 虚函数，对于某些子类置空，某些子类需要自己重新实现
+    //      功能描述；显示图像的直方图，对图形无效
     virtual void showHist() { } // 显示直方图
+    //      功能描述；设置图形的填充颜色，对图像无效
+    //      参数描述：填充的颜色color
     virtual void setFill(QColor &color) { } // 设置填充颜色
+    //      功能描述；设置图形的描边颜色，对图像无效
+    //      参数描述：描边的颜色color
     virtual void setStroke(QColor &color) { } // 设置描边颜色
+    //      功能描述；设置图形描边的粗细，对图像无效
+    //      参数描述：描边宽度width
     virtual void setStroke(int width) { } // 设置描边宽度
+    //      功能描述；判断多边形是否闭合，对其他类无效
+    //      返回值描述：多边形是否闭合
     virtual bool isClosed_poly() {return true;}// 多边形是否为闭合
+    //      功能描述；获取图形的描边，对图像无效
     virtual QPen getStroke() {return QPen();} // 获取描边的画笔
+    //      功能描述；获取图形的填充，对图像无效
     virtual QBrush getBrush() {return QBrush();} // 获取填充的笔刷
+public: // 所有以Graph为基类的图形/图像有相同实现方式的方法，直接在基类中实现
 
-
-public: // 所有以Graph为基类的图形有相同实现方式的方法
+    //      功能描述；绘制图形/图像辅助边框
+    //      参数描述：用于绘制的画笔painter
     inline void drawBorder(QPainter &painter); // 绘制辅助边框
+    //      功能描述；移动图形/图像
     inline void move(); // 移动
+    //      功能描述；旋转图形/图像
     inline void rotate(); // 旋转
+    //      功能描述；判断鼠标是否点击到有效区域
+    //      参数描述：鼠标点击位置pos
+    //      返回值描述：鼠标是否点击到辅助边框内部
     inline bool contain(QPoint &pos); // 判断（鼠标点击位置）是否在矩形框内部
+    //      功能描述；更改图形/图像的图层位置（即变换图层覆盖关系）
+    //      参数描述：新的图层位置index
     inline void changeIndex(int index); // 更换图层
-    inline void crop(); // 裁剪（本质上是调整边框，把边框作为遮罩）
+    //      功能描述；裁剪图形/图像，本质上是调整边框，绘制时把边框作为遮罩
+    inline void crop(); // 裁剪
+    //      功能描述；判断图形/图像在基类共有的内容是否相同
+    //      参数描述：需要比较的图形/图像graph
+    //      返回值描述：二者在基类共有的成员变量是否相同
     inline bool base_equal(const Graph& graph); // 判断基类包含属性是否相同，用于简化bool operator==
 
-//    virtual bool operator == (const Graph & graph) const = 0 ;
-
 protected:
+    //      功能描述；根据裁切比例确定边框
     inline void updateBorder(); // 根据裁切比例确定边框
+    //      功能描述；根据当前边框修正裁切比例
     inline void updateCropRatios(); // 根据边框确定裁切比例
 };
 

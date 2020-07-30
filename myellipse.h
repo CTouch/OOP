@@ -23,9 +23,8 @@ public: // 基类纯虚函数的继承
     void write(QDataStream &out) override;
     QBrush getBrush() override;
     QPen getStroke() override;
+    //      功能描述；判断两个椭圆是否相同
     bool operator == (const myEllipse& ellipse) const;
-//    bool operator == (const Graph& graph) const;
-
 private: // 私有成员
     QBrush Fill; // 填充笔刷
     QPen Stroke; // 描边画笔

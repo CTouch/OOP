@@ -43,9 +43,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    // 储存所有图形的链表
-//    QList<Graph*> AllGraphs;
-
     // 目前的操作模式
     SelectType selectType = CURSOR;
 
@@ -57,9 +54,6 @@ public:
     ~MainWindow();
 
 protected:
-    // 监测鼠标移动
-//    void mouseMoveEvent(QMouseEvent *event) override;
-
     // 监测鼠标左键单击
     void mousePressEvent(QMouseEvent *event) override;
 
@@ -79,25 +73,41 @@ private:
     bool onShift = false; // 监测shift键是否按下
     QPoint current_mouse = QPoint(-1, -1); // 当前鼠标的位置
     bool isClicking = false; // 左键是否按着（释放后才变为false）
-//    int selectedIndex = -1; // 当前选中的图层
     QColor lastColor; // 选择色板前的颜色
 
 private:
-    void drawAll(QPainter &painter); // 按图层顺序重新绘制链表中所有图形
-    void setupMenu(); // 初始化菜单栏
-    void init(); // 初始化界面
-    void deleteGraph(); // 删除选中的图层
-    void saveFile(QFile &file); // 写文件
+    //      功能描述；按图层顺序重新绘制链表中所有图形
+    //      参数描述：画笔painter
+    void drawAll(QPainter &painter);
 
-    //保存为.oop的入口，true为保存，false为未保存
+    //      功能描述；初始化菜单栏
+    void setupMenu();
+
+    //      功能描述；初始化界面
+    void init();
+
+    //      功能描述；删除当前选中的图层
+    void deleteGraph();
+
+    //      功能描述；储存文件信息
+    //      参数描述：待写入的文件file
+    void saveFile(QFile &file);
+
+    // 保存为.oop的入口，true为保存，false为未保存
     bool ActionSave();
-    void readFile(QFile &file); // 读文件
 
-    //读取.oop的入口
+    //      功能描述；读取文件信息
+    //      参数描述：待读取的文件file
+    void readFile(QFile &file);
+
+    // 读取.oop的入口
     void ActionRead();
-    void newFile(); // 新建文件，即清空
 
-    //导出为图像文件
+    //      功能描述；新建文件，即清空
+    void newFile();
+
+    //      功能描述；导出为图像文件
+    //      参数描述：文件名称FileName
     void ExportImageFile(const QString & FileName);
 
 private slots: // 槽函数，当某个信号被触发后会被调用
@@ -111,37 +121,36 @@ private slots: // 槽函数，当某个信号被触发后会被调用
     void on_index_list_currentIndexChanged(int index); // 更改当前选中图形的图层（不同于menu_layer）
     void on_scale_x_valueChanged(int value); // x方向的放缩
     void on_scale_y_valueChanged(int value); // y方向的放缩
-    void on_scale_lock_clicked(); // 锁定y、x方向的大小比例
-    void setColor_fill(QColor color); // 在调色卡选择填充颜色时
-    void setColor_stroke(QColor color); // 在调色卡选择描边颜色时
-    void recoverColor_fill(); // 在调色卡选择填充颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
-    void recoverColor_stroke(); // 在调色卡选择描边颜色后没有选择"OK"，则不更换颜色，恢复原来的颜色
-    void updateStatus(); // 选中图层发生改变后，相应的状态显示也要改变
 
-    //show the histogram in a new widget
+    //      功能描述；锁定图层x、y方向的大小比例，之后只能等比例缩放
+    void on_scale_lock_clicked();
+
+    //      功能描述；选中图层发生改变后，改变相应的状态显示
+    void updateStatus();
+
+    //      功能描述；在新的窗口显示当前图层的直方图
     void ShowImageHist(const QString & name, const myImage &image);
 
-    //show the histogram of the drawing board (at current time)
+    //      功能描述；显示整个画板的直方图
     void ShowDrawingBoardHist();
 
-    //展示当前图层的直方图
+    //      功能描述；展示当前图层的直方图
     void ShowCurrentLayerHist();
 
-    //保存修改并创建新文件
+    //      功能描述；保存修改并创建新文件
     void SaveChangeAndNew();
 
-    //不保存修改并创建新文件
+    //      功能描述；不保存修改并创建新文件
     void NottoSaveChangeAndNew();
 
-    //cancel
+    //      功能描述；取消新建文件的操作
     void CancelDialogChecktoSave();
 
-    //保存修改并打开oop文件
+    //      功能描述；保存修改并打开oop文件
     void SaveChangeAndOpen();
 
-    //不保存修改并创建新文件
+    //      功能描述；不保存修改并创建新文件
     void NottoSaveChangeAndOpen();
-
 private:
     Ui::MainWindow *ui;
 };

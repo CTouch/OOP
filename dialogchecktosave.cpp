@@ -7,34 +7,27 @@ DialogChecktoSave::DialogChecktoSave(QWidget *parent) :
 {
     ui->setupUi(this);
     //连接信号槽
-    connect(ui->buttonSave,&QPushButton::clicked,this,&DialogChecktoSave::slotButtonSaveClicked);
-    connect(ui->buttonNottoSave,&QPushButton::clicked,this,&DialogChecktoSave::slotButtonNottoSaveClicked);
-    connect(ui->buttonCancel,&QPushButton::clicked,this,&DialogChecktoSave::slotButtonCancelClicked);
+    connect(ui->buttonSave, &QPushButton::clicked, this, [&](){
+        // 按下save之后执行的lambda表达式
+        emit signalButtonSaveClicked(); // 发射按下save按钮的信号
+        disconnect();
+        close();
+    });
+    connect(ui->buttonNottoSave,&QPushButton::clicked, this, [&](){
+        // 按下not to save之后执行的lambda表达式
+        emit signalButtonNottoSaveClicked(); // 发射按下not to save按钮的信号
+        disconnect();
+        close();
+    });
+    connect(ui->buttonCancel,&QPushButton::clicked, this, [&](){
+        // 按下cancel之后执行的lambda表达式
+        emit signalButtonCancelClicked(); // 发射按下cancel按钮的信号
+        disconnect();
+        close();
+    });
 }
 
 DialogChecktoSave::~DialogChecktoSave()
 {
     delete ui;
-}
-
-
-void DialogChecktoSave::slotButtonSaveClicked()
-{
-    signalButtonSaveClicked();
-    disconnect();
-    close();
-}
-
-void DialogChecktoSave::slotButtonNottoSaveClicked()
-{
-    signalButtonNottoSaveClicked();
-    disconnect();
-    close();
-}
-
-void DialogChecktoSave::slotButtonCancelClicked()
-{
-    signalButtonCancelClicked();
-    disconnect();
-    close();
 }

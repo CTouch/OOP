@@ -19,18 +19,17 @@ class HistWidget : public QWidget
 public:
     explicit HistWidget(QWidget *parent = nullptr);
 
-    //根据image得到直方图
+    //      功能描述；获取图像的直方图
+    //      参数描述：考虑的图像myImage，以及绘制的窗口parent
     HistWidget(const myImage &image, QWidget *parent = nullptr);
 
     ~HistWidget();
-
-
 public:
-    //show all histograms
+    //      功能描述；显示所有的直方图
     void ShowAllHist();
 
 private:
-    //将直方图数据hist[]用颜色color展示在label上
+    // 将直方图数据hist[]用颜色color展示在label上
     void ShowOneHist(const int hist[],QLabel *label,const Qt::GlobalColor & color);
 private:
     Ui::HistWidget *ui;
